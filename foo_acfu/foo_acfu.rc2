@@ -1,0 +1,48 @@
+//
+// source_filter.rc2 - resources Microsoft Visual C++ does not edit directly
+//
+
+#ifdef APSTUDIO_INVOKED
+#error this file is not editable by Microsoft Visual C++
+#endif //APSTUDIO_INVOKED
+
+#include "../version.h"
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Version
+//
+
+VS_VERSION_INFO VERSIONINFO
+ FILEVERSION APP_VERSION_MAJOR,APP_VERSION_MINOR,APP_VERSION_BUILD,0
+ PRODUCTVERSION APP_VERSION_MAJOR,APP_VERSION_MINOR,APP_VERSION_BUILD,0
+ FILEFLAGSMASK 0x3fL
+#ifdef _DEBUG
+ FILEFLAGS 0x1L
+#else
+ FILEFLAGS 0x0L
+#endif
+ FILEOS 0x4L
+ FILETYPE 0x1L
+ FILESUBTYPE 0x0L
+BEGIN
+    BLOCK "StringFileInfo"
+    BEGIN
+        BLOCK "040904e4"
+        BEGIN
+            VALUE "Comments", "https://3dyd.com"
+            VALUE "CompanyName", "3DYD Soft"
+            VALUE "FileDescription", APP_LONG_NAME
+            VALUE "FileVersion", APP_VERSION
+            VALUE "InternalName", APP_BINARY_NAME
+            VALUE "LegalCopyright", "Copyright (C) 2018 3DYD Soft"
+            VALUE "OriginalFilename", APP_BINARY_NAME ".dll"
+            VALUE "ProductName", APP_SHORT_NAME
+            VALUE "ProductVersion", APP_VERSION
+        END
+    END
+    BLOCK "VarFileInfo"
+    BEGIN
+        VALUE "Translation", 0x409, 1252
+    END
+END
