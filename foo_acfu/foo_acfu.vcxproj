@@ -125,9 +125,6 @@
     <ClInclude Include="version.h" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\foobar2000\ATLHelpers\foobar2000_ATL_helpers.vcxproj">
-      <Project>{0430cbce-9b03-4020-b192-a902f23d0dae}</Project>
-    </ProjectReference>
     <ProjectReference Include="..\foobar2000\foobar2000_component_client\foobar2000_component_client.vcxproj">
       <Project>{71ad2674-065b-48f5-b8b0-e1f9d3892081}</Project>
     </ProjectReference>
