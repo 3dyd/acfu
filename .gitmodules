@@ -11,3 +11,7 @@
 [submodule "acfu-sdk"]
 	path = acfu-sdk
 	url = https://github.com/3dyd/acfu-sdk
+[submodule "rapidjson"]
+	path = rapidjson
+	url = https://github.com/Tencent/rapidjson
+	shallow = true
