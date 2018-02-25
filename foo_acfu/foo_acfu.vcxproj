@@ -46,10 +46,12 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <OutDir>$(SolutionDir)$(Configuration)\user-components\foo_acfu\</OutDir>
     <LinkIncremental>true</LinkIncremental>
+    <IncludePath>$(SolutionDir)..\rapidjson\include;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <OutDir>$(SolutionDir)$(Configuration)\user-components\foo_acfu\</OutDir>
     <LinkIncremental>false</LinkIncremental>
+    <IncludePath>$(SolutionDir)..\rapidjson\include;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -110,9 +112,9 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\acfu-sdk\acfu.h" />
-    <ClInclude Include="..\acfu-sdk\acfu_check.h" />
-    <ClInclude Include="..\acfu-sdk\acfu_github.h" />
-    <ClInclude Include="..\acfu-sdk\acfu_util.h" />
+    <ClInclude Include="..\acfu-sdk\utils\check.h" />
+    <ClInclude Include="..\acfu-sdk\utils\common.h" />
+    <ClInclude Include="..\acfu-sdk\utils\github.h" />
     <ClInclude Include="cache.h" />
     <ClInclude Include="list_column_auto_size.h" />
     <ClInclude Include="preferences_dlg.h" />

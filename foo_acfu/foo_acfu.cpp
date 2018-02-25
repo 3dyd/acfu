@@ -1,5 +1,4 @@
 #include "stdafx.h"
-#include "../acfu-sdk/acfu_github.h"
 
 DECLARE_COMPONENT_VERSION(
   "Auto Check for Update",

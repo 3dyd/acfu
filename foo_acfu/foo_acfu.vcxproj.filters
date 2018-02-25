@@ -13,6 +13,9 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav</Extensions>
     </Filter>
+    <Filter Include="SDK">
+      <UniqueIdentifier>{f937d24e-feaf-4f69-b11c-5ed723d3deac}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="foo_acfu.cpp">
@@ -50,18 +53,6 @@
     <ClInclude Include="cache.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\acfu-sdk\acfu.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\acfu-sdk\acfu_check.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\acfu-sdk\acfu_github.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\acfu-sdk\acfu_util.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="version.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -70,6 +61,18 @@
     </ClInclude>
     <ClInclude Include="split_button.h">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\acfu-sdk\acfu.h">
+      <Filter>SDK</Filter>
+    </ClInclude>
+    <ClInclude Include="..\acfu-sdk\utils\common.h">
+      <Filter>SDK</Filter>
+    </ClInclude>
+    <ClInclude Include="..\acfu-sdk\utils\github.h">
+      <Filter>SDK</Filter>
+    </ClInclude>
+    <ClInclude Include="..\acfu-sdk\utils\check.h">
+      <Filter>SDK</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

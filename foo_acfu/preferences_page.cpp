@@ -1,7 +1,6 @@
 #include "stdafx.h"
 #include "resource.h"
 #include "preferences_dlg.h"
-#include "../acfu-sdk/acfu_util.h"
 
 // {B9256E8C-C335-4497-94F6-69E58AB358B7}
 static const GUID guid_preferences_page =

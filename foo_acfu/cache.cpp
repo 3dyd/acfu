@@ -1,6 +1,5 @@
 #include "stdafx.h"
 #include "cache.h"
-#include "../acfu-sdk/acfu_util.h"
 
 namespace acfu {
   

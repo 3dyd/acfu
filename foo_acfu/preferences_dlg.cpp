@@ -1,7 +1,6 @@
 #include "stdafx.h"
 #include "resource.h"
 #include "preferences_dlg.h"
-#include "../acfu-sdk/acfu_check.h"
 #include "cache.h"
 #include "scheduler.h"
 
@@ -132,7 +131,7 @@ void PreferencesDlg::OnCfuAll(UINT uNotifyCode, int nID, CWindow wndCtl) {
 
 void PreferencesDlg::OnCfuSingle(UINT uNotifyCode, int nID, CWindow wndCtl) {
   if (auto guid_ptr = reinterpret_cast<GUID*>(list_.GetItemData(list_.GetSelectedIndex()))) {
-    acfu::check_for_updates::g_check(m_hWnd, *guid_ptr);
+    acfu::check::g_check(m_hWnd, *guid_ptr);
   }
 }
 
