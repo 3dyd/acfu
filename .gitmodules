@@ -8,3 +8,6 @@
 	path = foobar2000
 	url = https://github.com/reupen/foobar2000-sdk.git
 	ignore = dirty
+[submodule "acfu-sdk"]
+	path = acfu-sdk
+	url = https://github.com/3dyd/acfu-sdk
