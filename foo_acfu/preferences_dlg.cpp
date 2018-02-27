@@ -270,5 +270,8 @@ void PreferencesDlg::UpdateListItem(int index, const GUID& guid, const file_info
   if (auto value = info.meta_get("version", 0)) {
     last_version = value;
   }
+  else if (acfu::source::g_get(guid)->is_newer(info)) {
+    ATLVERIFY(uLoadString(WTL::ModuleHelper::GetResourceInstance(), IDS_GREATER_VERSION, last_version));
+  }
   list_.SetItemText(index, kColAvailable, pfc::stringcvt::string_os_from_utf8(last_version));
 }
