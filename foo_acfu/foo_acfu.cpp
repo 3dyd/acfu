@@ -6,7 +6,7 @@ DECLARE_COMPONENT_VERSION(
   "Release date: " __DATE__ "\n3dyd, acfu@3dyd.com"
 );
 
-VALIDATE_COMPONENT_FILENAME("foo_acfu.dll");
+VALIDATE_COMPONENT_FILENAME(APP_BINARY_NAME ".dll");
 
 struct AcfuGithubConf: acfu::github_conf {
   static const char* get_owner() {
@@ -14,7 +14,7 @@ struct AcfuGithubConf: acfu::github_conf {
   }
 
   static const char* get_repo() {
-    return APP_BINARY_NAME;
+    return "acfu";
   }
 };
 
