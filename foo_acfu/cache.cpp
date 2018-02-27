@@ -151,8 +151,8 @@ void CacheImpl::SetInfoInMainThread(const GUID& guid, const file_info& info) {
     }
     existing = info;
   }
-  callbacks_.for_each([&guid](auto callback) {
-    callback->on_info_changed(guid);
+  callbacks_.for_each([&guid, &info](auto callback) {
+    callback->on_info_changed(guid, info);
   });
 }
 

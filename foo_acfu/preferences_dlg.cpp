@@ -19,7 +19,7 @@ PreferencesDlg::~PreferencesDlg() {
 }
 
 void PreferencesDlg::apply() {
-  auto sources = GetSources();
+  auto sources = GetCheckedSources();
   pfc::list_t<GUID>::g_swap(acfu::cfg_acfu_sources, sources);
 
   t_uint32 period = CUpDownCtrl(GetDlgItem(IDC_PERIOD_SPIN)).GetPos(NULL);
@@ -32,9 +32,18 @@ void PreferencesDlg::apply() {
   callback_->on_state_changed();
 }
 
-pfc::list_t<GUID> PreferencesDlg::GetSources() const {
+void PreferencesDlg::FreeList() {
+  for (int i = list_.GetItemCount() - 1; i >= 0; i --) {
+    if (auto guid = reinterpret_cast<GUID*>(list_.GetItemData(i))) {
+      delete guid;
+    }
+  }
+  list_.DeleteAllItems();
+}
+
+pfc::list_t<GUID> PreferencesDlg::GetCheckedSources() const {
   pfc::list_t<GUID> sources;
-  ListForEach([&](const auto& guid, auto index) {
+  ForEachInList([&](const auto& guid, auto index) {
     if (list_.GetCheckState(index)) {
       sources.add_item(guid);
     }
@@ -45,16 +54,29 @@ pfc::list_t<GUID> PreferencesDlg::GetSources() const {
   return sources;
 }
 
-void PreferencesDlg::ListFree() {
-  for (int i = list_.GetItemCount() - 1; i >= 0; i --) {
-    if (auto guid = reinterpret_cast<GUID*>(list_.GetItemData(i))) {
-      delete guid;
-    }
-  }
-  list_.DeleteAllItems();
+t_uint32 PreferencesDlg::get_state() {
+  bool resettable = false, changed = false, need_restart = false;
+
+  auto sources = GetCheckedSources();
+  resettable = resettable || 0 != sources.get_count();
+  changed = changed || !decltype(sources)::g_equals(sources, acfu::cfg_acfu_sources);
+
+  t_uint32 period = CUpDownCtrl(GetDlgItem(IDC_PERIOD_SPIN)).GetPos(NULL);
+  resettable = resettable || acfu::Scheduler::kPeriodDefault != period;
+  changed = changed || static_api_ptr_t<acfu::Scheduler>()->GetPeriod() != period;
+
+  resettable = resettable || clear_cache_;
+  changed = changed || clear_cache_;
+  need_restart = need_restart  || clear_cache_;
+
+  t_uint32 state = resettable ? preferences_state::resettable : 0;
+  state |= changed ? preferences_state::changed : 0;
+  state |= need_restart ? preferences_state::needs_restart : 0;
+
+  return state;
 }
 
-void PreferencesDlg::ListInit() {
+void PreferencesDlg::InitList() {
   acfu::for_each_service<acfu::source>([&](auto ptr) {
     if (pfc::guid_null == ptr->get_guid()) {
       return;
@@ -85,48 +107,16 @@ void PreferencesDlg::ListInit() {
   });
 }
 
-void PreferencesDlg::ListUpdate() {
-  static_api_ptr_t<acfu::cache> cache;
-  ListForEach([&](auto guid, auto index) {
-    file_info_impl info;
-    if (cache->get_info(guid, info)) {
-      pfc::string8 last_version;
-      if (auto value = info.meta_get("version", 0)) {
-        last_version = value;
-      }
-      list_.SetItemText(index, kColAvailable, pfc::stringcvt::string_os_from_utf8(last_version));
+void PreferencesDlg::on_info_changed(const GUID& guid, const file_info& info) {
+  ForEachInList([&](auto item_guid, auto index) {
+    if (item_guid == guid) {
+      UpdateListItem(index, guid, info);
     }
   });
 }
 
-t_uint32 PreferencesDlg::get_state() {
-  bool resettable = false, changed = false, need_restart = false;
-
-  auto sources = GetSources();
-  resettable = resettable || 0 != sources.get_count();
-  changed = changed || !decltype(sources)::g_equals(sources, acfu::cfg_acfu_sources);
-
-  t_uint32 period = CUpDownCtrl(GetDlgItem(IDC_PERIOD_SPIN)).GetPos(NULL);
-  resettable = resettable || acfu::Scheduler::kPeriodDefault != period;
-  changed = changed || static_api_ptr_t<acfu::Scheduler>()->GetPeriod() != period;
-
-  resettable = resettable || clear_cache_;
-  changed = changed || clear_cache_;
-  need_restart = need_restart  || clear_cache_;
-
-  t_uint32 state = resettable ? preferences_state::resettable : 0;
-  state |= changed ? preferences_state::changed : 0;
-  state |= need_restart ? preferences_state::needs_restart : 0;
-
-  return state;
-}
-
-void PreferencesDlg::on_info_changed(const GUID& guid) {
-  ListUpdate();
-}
-
 void PreferencesDlg::OnCfuAll(UINT uNotifyCode, int nID, CWindow wndCtl) {
-  acfu::Scheduler::Check(m_hWnd, GetSources());
+  acfu::Scheduler::Check(m_hWnd, GetCheckedSources());
 }
 
 void PreferencesDlg::OnCfuSingle(UINT uNotifyCode, int nID, CWindow wndCtl) {
@@ -169,7 +159,7 @@ void PreferencesDlg::OnContextMenu(CWindow wnd, _WTYPES_NS::CPoint point) {
 }
 
 void PreferencesDlg::OnDestroy() {
-  ListFree();
+  FreeList();
   static_api_ptr_t<acfu::cache>()->unregister_callback(this);
 }
 
@@ -193,8 +183,8 @@ BOOL PreferencesDlg::OnInitDialog(CWindow wndFocus, LPARAM lInitParam) {
   ATLVERIFY(kColInstalled == list_.InsertColumn(kColInstalled, L"Installed", LVCFMT_RIGHT));
   ATLVERIFY(kColAvailable == list_.InsertColumn(kColAvailable, L"Available", LVCFMT_RIGHT));
 
-  ListInit();
-  ListUpdate();
+  InitList();
+  UpdateList();
 
   split_.SubclassWindow(GetDlgItem(IDC_CFU_ALL));
 
@@ -264,4 +254,21 @@ void PreferencesDlg::reset() {
   clear_cache_ = false;
 
   callback_->on_state_changed();
+}
+
+void PreferencesDlg::UpdateList() {
+  static_api_ptr_t<acfu::cache> cache;
+  ForEachInList([&](auto guid, auto index) {
+    file_info_impl info;
+    cache->get_info(guid, info);
+    UpdateListItem(index, guid, info);
+  });
+}
+
+void PreferencesDlg::UpdateListItem(int index, const GUID& guid, const file_info& info) {
+  pfc::string8 last_version;
+  if (auto value = info.meta_get("version", 0)) {
+    last_version = value;
+  }
+  list_.SetItemText(index, kColAvailable, pfc::stringcvt::string_os_from_utf8(last_version));
 }

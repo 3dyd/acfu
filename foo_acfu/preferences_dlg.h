@@ -46,15 +46,16 @@ class PreferencesDlg: public CDialogImpl<PreferencesDlg>,
   virtual void reset();
 
   // acfu::cache::callback
-  virtual void on_info_changed(const GUID& guid);
+  virtual void on_info_changed(const GUID& guid, const file_info& info);
 
-  pfc::list_t<GUID> GetSources() const;
-  void ListFree();
-  void ListInit();
-  void ListUpdate();
+  pfc::list_t<GUID> GetCheckedSources() const;
+  void FreeList();
+  void InitList();
+  void UpdateList();
+  void UpdateListItem(int index, const GUID& guid, const file_info& info);
 
   template <class TFunc>
-  void ListForEach(TFunc func) const {
+  void ForEachInList(TFunc func) const {
     for (int i = list_.GetItemCount() - 1; i >= 0; i --) {
       if (auto guid_ptr = reinterpret_cast<GUID*>(list_.GetItemData(i))) {
         func(*guid_ptr, i);
