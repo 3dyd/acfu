@@ -4,7 +4,7 @@
 
 namespace acfu {
   
-class CacheImpl: public cache {
+class UpdatesImpl: public updates {
  public:
   virtual void register_callback(callback* callback);
   virtual void unregister_callback(callback* callback);
@@ -24,6 +24,7 @@ class CacheImpl: public cache {
  private:
   pfc::list_t<callback*> callbacks_;
   pfc::map_t<pfc::string8, file_info_const_impl, pfc::string::comparatorCaseInsensitive> cache_;
+  pfc::list_t<GUID> updates_;
   pfc::mutex mutex_;
   bool clean_up_ = false;
 };

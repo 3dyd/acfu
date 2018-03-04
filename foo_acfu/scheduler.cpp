@@ -53,7 +53,7 @@ class Check: public threaded_process_callback {
         if (request.is_valid()) {
           file_info_impl info;
           request->run(info, abort);
-          static_api_ptr_t<cache>()->set_info(source->get_guid(), info);
+          static_api_ptr_t<updates>()->set_info(source->get_guid(), info);
         }
       }
       catch (std::exception& e) {

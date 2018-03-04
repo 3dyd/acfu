@@ -6,7 +6,7 @@
 
 class PreferencesDlg: public CDialogImpl<PreferencesDlg>,
                       public preferences_page_instance,
-                      public acfu::cache::callback {
+                      public acfu::updates::callback {
  public:
   enum { IDD = IDD_PROPERTIES };
 

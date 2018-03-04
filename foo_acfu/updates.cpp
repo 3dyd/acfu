@@ -1,11 +1,11 @@
 #include "stdafx.h"
-#include "cache.h"
+#include "updates.h"
 
 namespace acfu {
   
 static const char* CLEANUP_FLAG = "." APP_BINARY_NAME "-clean-up";
 
-static service_factory_single_t<CacheImpl> g_cache;
+static service_factory_single_t<UpdatesImpl> g_cache;
 
 class CacheLoad: public init_stage_callback {
   virtual void on_init_stage(t_uint32 stage) {
@@ -27,11 +27,11 @@ static service_factory_single_t<CacheSave> g_cache_save;
 
 //////////////////////////////////////////////////////////////////////////
 
-pfc::string8 CacheImpl::GetCacheDir() {
+pfc::string8 UpdatesImpl::GetCacheDir() {
   return core_api::pathInProfile(APP_BINARY_NAME "\\cache\\");
 }
 
-bool CacheImpl::get_info(const GUID& guid, file_info& info) {
+bool UpdatesImpl::get_info(const GUID& guid, file_info& info) {
   pfc::mutexScope lock(mutex_);
 
   auto it = cache_.find(pfc::string8(pfc::print_guid(guid)).get_ptr());
@@ -44,7 +44,7 @@ bool CacheImpl::get_info(const GUID& guid, file_info& info) {
   return true;
 }
 
-void CacheImpl::Load() {
+void UpdatesImpl::Load() {
   abort_callback_dummy abort;
   pfc::list_t<pfc::string8> paths;
   bool clean_up = false;
@@ -67,6 +67,7 @@ void CacheImpl::Load() {
   }
 
   decltype(cache_) cache;
+  decltype(updates_) updates;
   paths.enumerate([&](const auto& path) {
     auto filename = pfc::string_filename_ext(path);
     try {
@@ -81,6 +82,9 @@ void CacheImpl::Load() {
         file_info_impl info;
         info.from_stream(file.get_ptr(), abort);
         cache[filename.get_ptr()] = info;
+        if (source->is_newer(info)) {
+          updates.add_item(guid);
+        }
       }
     }
     catch (std::exception& e) {
@@ -93,15 +97,32 @@ void CacheImpl::Load() {
   {
     pfc::mutexScope lock(mutex_);
     cache_ = cache;
+    updates_ = updates;
+  }
+
+  if (0 != updates.get_count()) {
+    callbacks_.for_each([&updates](auto callback) {
+      callback->on_updates_available(updates);
+    });
   }
 }
 
-void CacheImpl::register_callback(callback* callback) {
+void UpdatesImpl::register_callback(callback* callback) {
   core_api::ensure_main_thread();
   callbacks_.add_item(callback);
+
+  decltype(updates_) updates;
+  {
+    pfc::mutexScope lock(mutex_);
+    if (0 == updates_.get_count()) {
+      return;
+    }
+    updates = updates_;
+  }
+  callback->on_updates_available(updates);
 }
 
-void CacheImpl::Save() {
+void UpdatesImpl::Save() {
   decltype(cache_) cache;
   {
     pfc::mutexScope lock(mutex_);
@@ -131,32 +152,62 @@ void CacheImpl::Save() {
   }
 }
 
-void CacheImpl::ScheduleCleanup() {
+void UpdatesImpl::ScheduleCleanup() {
   g_cache.get_static_instance().clean_up_ = true;
 }
 
-void CacheImpl::set_info(const GUID& guid, const file_info& info) {
+void UpdatesImpl::set_info(const GUID& guid, const file_info& info) {
   file_info_const_impl copy(info);
   fb2k::inMainThread([this, guid, copy = std::move(copy)] {
     SetInfoInMainThread(guid, copy);
   });
 }
 
-void CacheImpl::SetInfoInMainThread(const GUID& guid, const file_info& info) {
+void UpdatesImpl::SetInfoInMainThread(const GUID& guid, const file_info& info) {
   {
     pfc::mutexScope lock(mutex_);
+
     auto& existing = cache_[pfc::print_guid(guid).get_ptr()];
     if (file_info::g_is_info_equal(existing, info)) {
       return;
     }
     existing = info;
   }
+
   callbacks_.for_each([&guid, &info](auto callback) {
     callback->on_info_changed(guid, info);
   });
+
+  bool is_newer = false;
+  if (auto source = source::g_get(guid); source.is_valid()) {
+    is_newer = source->is_newer(info);
+  }
+
+  bool notify_updates_available = false;
+  decltype(updates_) updates;
+  {
+    pfc::mutexScope lock(mutex_);
+
+    auto index = updates_.find_item(guid);
+    bool known_newer = ~0 != index;
+    if (known_newer == is_newer) {
+      return;
+    }
+    if (is_newer) {
+      updates_.add_item(guid);
+    }
+    else {
+      updates_.remove_by_idx(index);
+    }
+    updates = updates_;
+  }
+
+  callbacks_.for_each([&updates](auto callback) {
+    callback->on_updates_available(updates);
+  });
 }
 
-void CacheImpl::unregister_callback(callback* callback) {
+void UpdatesImpl::unregister_callback(callback* callback) {
   core_api::ensure_main_thread();
 
   auto index = callbacks_.find_item(callback);

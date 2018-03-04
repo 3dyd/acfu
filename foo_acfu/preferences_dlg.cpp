@@ -1,8 +1,8 @@
 #include "stdafx.h"
 #include "resource.h"
 #include "preferences_dlg.h"
-#include "cache.h"
 #include "scheduler.h"
+#include "updates.h"
 
 enum {
   kColName,
@@ -26,7 +26,7 @@ void PreferencesDlg::apply() {
   static_api_ptr_t<acfu::Scheduler>()->SetPeriod(period);
 
   if (clear_cache_) {
-    acfu::CacheImpl::ScheduleCleanup();
+    acfu::UpdatesImpl::ScheduleCleanup();
   }
 
   callback_->on_state_changed();
@@ -160,7 +160,7 @@ void PreferencesDlg::OnContextMenu(CWindow wnd, _WTYPES_NS::CPoint point) {
 
 void PreferencesDlg::OnDestroy() {
   FreeList();
-  static_api_ptr_t<acfu::cache>()->unregister_callback(this);
+  static_api_ptr_t<acfu::updates>()->unregister_callback(this);
 }
 
 BOOL PreferencesDlg::OnInitDialog(CWindow wndFocus, LPARAM lInitParam) {
@@ -188,7 +188,7 @@ BOOL PreferencesDlg::OnInitDialog(CWindow wndFocus, LPARAM lInitParam) {
 
   split_.SubclassWindow(GetDlgItem(IDC_CFU_ALL));
 
-  static_api_ptr_t<acfu::cache>()->register_callback(this);
+  static_api_ptr_t<acfu::updates>()->register_callback(this);
 
   return TRUE;
 }
@@ -257,10 +257,10 @@ void PreferencesDlg::reset() {
 }
 
 void PreferencesDlg::UpdateList() {
-  static_api_ptr_t<acfu::cache> cache;
+  static_api_ptr_t<acfu::updates> updates;
   ForEachInList([&](auto guid, auto index) {
     file_info_impl info;
-    cache->get_info(guid, info);
+    updates->get_info(guid, info);
     UpdateListItem(index, guid, info);
   });
 }
