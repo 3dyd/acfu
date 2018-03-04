@@ -16,6 +16,12 @@
     <Filter Include="SDK">
       <UniqueIdentifier>{f937d24e-feaf-4f69-b11c-5ed723d3deac}</UniqueIdentifier>
     </Filter>
+    <Filter Include="UI">
+      <UniqueIdentifier>{c7fee20e-972e-4a6e-86bc-afa3c335a4e3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Preferences">
+      <UniqueIdentifier>{192adf1f-a08a-442f-8297-5668d47894be}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="foo_acfu.cpp">
@@ -24,17 +30,23 @@
     <ClCompile Include="stdafx.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="preferences_page.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="preferences_dlg.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="scheduler.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="updates.cpp">
       <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="status_wnd.cpp">
+      <Filter>UI</Filter>
+    </ClCompile>
+    <ClCompile Include="status_dui.cpp">
+      <Filter>UI</Filter>
+    </ClCompile>
+    <ClCompile Include="preferences_dlg.cpp">
+      <Filter>Preferences</Filter>
+    </ClCompile>
+    <ClCompile Include="preferences_page.cpp">
+      <Filter>Preferences</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -44,19 +56,10 @@
     <ClInclude Include="resource.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="preferences_dlg.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="scheduler.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="version.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="list_column_auto_size.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="split_button.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="..\acfu-sdk\acfu.h">
@@ -73,6 +76,21 @@
     </ClInclude>
     <ClInclude Include="updates.h">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="status_wnd.h">
+      <Filter>UI</Filter>
+    </ClInclude>
+    <ClInclude Include="preferences_page.h">
+      <Filter>Preferences</Filter>
+    </ClInclude>
+    <ClInclude Include="preferences_dlg.h">
+      <Filter>Preferences</Filter>
+    </ClInclude>
+    <ClInclude Include="list_column_auto_size.h">
+      <Filter>Preferences</Filter>
+    </ClInclude>
+    <ClInclude Include="split_button.h">
+      <Filter>Preferences</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

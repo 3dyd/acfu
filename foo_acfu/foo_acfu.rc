@@ -17,6 +17,7 @@
 
 #if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_ENU)
 LANGUAGE LANG_ENGLISH, SUBLANG_ENGLISH_US
+#pragma code_page(1252)
 
 #ifdef APSTUDIO_INVOKED
 /////////////////////////////////////////////////////////////////////////////
@@ -113,6 +114,8 @@ STRINGTABLE
 BEGIN
     IDS_NEED_APPLY          "%s (please apply changes to complete)"
     IDS_GREATER_VERSION     "greater"
+    IDS_NO_UPDATES          "No updates are available"
+    IDS_UPDATES_AVAILABLE   "Updates are available (%d)"
 END
 
 #endif    // English (United States) resources

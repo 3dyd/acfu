@@ -7,6 +7,8 @@
 #define IDR_MAIN_POPUP                  103
 #define IDS_NEED_APPLY                  201
 #define IDS_GREATER_VERSION             202
+#define IDS_NO_UPDATES                  203
+#define IDS_UPDATES_AVAILABLE           204
 #define IDC_SOURCE_LIST                 1001
 #define IDC_WHY_LINK                    1002
 #define IDC_AVAILABLE_SOURCES           1003
@@ -15,13 +17,14 @@
 #define IDC_PERIOD_SPIN                 1006
 #define ID_CFU_SINGLE                   40001
 #define ID_CLEAR_CACHE                  40002
+#define ID_PREFERENCES                  40003
 
 // Next default values for new objects
 // 
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NEXT_RESOURCE_VALUE        104
-#define _APS_NEXT_COMMAND_VALUE         40003
+#define _APS_NEXT_COMMAND_VALUE         40004
 #define _APS_NEXT_CONTROL_VALUE         1007
 #define _APS_NEXT_SYMED_VALUE           101
 #endif

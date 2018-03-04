@@ -7,7 +7,7 @@ extern cfg_guidlist cfg_acfu_sources;
 class Scheduler: public service_base {
   FB2K_MAKE_SERVICE_INTERFACE_ENTRYPOINT(Scheduler);
 
-public:
+ public:
   enum {
     kMsInDay = 1000 * 60 * 60 * 24,
     kPeriodMax = USER_TIMER_MAXIMUM / kMsInDay,

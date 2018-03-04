@@ -2,6 +2,7 @@
 
 #define APP_LONG_NAME         "Updates checker for foobar2000"
 #define APP_SHORT_NAME        "Auto Check for Updates"
+#define APP_DESCRIPTION       "Provides generic way for components to check for updates."
 #define APP_BINARY_NAME       "foo_acfu"
 
 #define APP_VERSION_MAJOR 0

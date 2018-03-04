@@ -1,9 +1,9 @@
 #include "stdafx.h"
 
 DECLARE_COMPONENT_VERSION(
-  "Auto Check for Update",
+  APP_SHORT_NAME,
   APP_VERSION,
-  "Release date: " __DATE__ "\n3dyd, acfu@3dyd.com"
+  APP_DESCRIPTION "\n\nRelease date: " __DATE__ "\n3dyd, acfu@3dyd.com"
 );
 
 VALIDATE_COMPONENT_FILENAME(APP_BINARY_NAME ".dll");
@@ -20,11 +20,22 @@ struct AcfuGithubConf: acfu::github_conf {
 
 #if 0
 // #ifdef _DEBUG
+
+#include "preferences_page.h"
+
+class PpDebug: public initquit {
+  virtual void on_init() {
+    static_api_ptr_t<ui_control>()->show_preferences(guid_preferences_page);
+  }
+};
+static service_factory_single_t<PpDebug> g_pp_debug;
+
 class AcfuRequest: public acfu::github_releases<AcfuGithubConf> {
   virtual pfc::string8 form_releases_url() {
     return "http://127.0.0.1:8888/releases.json";
   }
 };
+
 #else
 typedef acfu::github_releases<AcfuGithubConf> AcfuRequest;
 #endif
