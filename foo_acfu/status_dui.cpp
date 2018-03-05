@@ -40,7 +40,7 @@ class StatusDuiImpl: public StatusWnd, public ui_element_instance {
   }
 
   void initialize_window(HWND parent) {
-    WIN32_OP(Create(parent, NULL, TEXT(APP_SHORT_NAME), WS_CHILD | WS_VISIBLE, WS_EX_CONTROLPARENT) != NULL);
+    WIN32_OP(Create(parent, NULL, TEXT(APP_SHORT_NAME)) != NULL);
   }
 
  private:

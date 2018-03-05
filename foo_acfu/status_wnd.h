@@ -1,6 +1,8 @@
 #pragma once
 
-class StatusWnd: public CWindowImpl<StatusWnd>, public acfu::updates::callback {
+typedef CWinTraitsOR<0, WS_EX_CONTROLPARENT> StatusWndTraits;
+
+class StatusWnd: public CWindowImpl<StatusWnd, CWindow, StatusWndTraits>, public acfu::updates::callback {
  public:
   BEGIN_MSG_MAP_EX(StatusWnd)
     MSG_WM_CREATE(OnCreate)
@@ -11,14 +13,16 @@ class StatusWnd: public CWindowImpl<StatusWnd>, public acfu::updates::callback {
     NOTIFY_CODE_HANDLER_EX(TTN_GETDISPINFO, OnToolTipText)
   END_MSG_MAP()
 
- protected:
   enum Color {
     kColorBackground,
     kColorHighlight,
   };
+
+  void OnUiChanged();
+
+ protected:
   virtual COLORREF GetUiColor(Color color) const = 0;
   virtual CFontHandle GetUiFont() const = 0;
-  void OnUiChanged();
 
  private:
   int OnCreate(LPCREATESTRUCT lpCreateStruct);

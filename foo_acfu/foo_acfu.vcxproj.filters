@@ -48,6 +48,9 @@
     <ClCompile Include="preferences_page.cpp">
       <Filter>Preferences</Filter>
     </ClCompile>
+    <ClCompile Include="status_cui.cpp">
+      <Filter>UI</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
