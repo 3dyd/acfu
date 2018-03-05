@@ -178,6 +178,11 @@ BOOL PreferencesDlg::OnInitDialog(CWindow wndFocus, LPARAM lInitParam) {
   DWORD style = LVS_EX_DOUBLEBUFFER | LVS_EX_CHECKBOXES | LVS_EX_FULLROWSELECT | LVS_EX_INFOTIP;
   list_.SetExtendedListViewStyle(style, style);
 
+  CImageListManaged il;
+  il.Create(GetSystemMetrics(SM_CXSMICON), GetSystemMetrics(SM_CYSMICON), ILC_COLOR32, 0, 1);
+  il.AddIcon(LoadIcon(NULL, IDI_EXCLAMATION));
+  list_.SetImageList(il.Detach(), LVSIL_SMALL);
+
   ATLVERIFY(kColName == list_.InsertColumn(kColName, L"Name"));
   ATLVERIFY(kColModule == list_.InsertColumn(kColModule, L"Module"));
   ATLVERIFY(kColInstalled == list_.InsertColumn(kColInstalled, L"Installed", LVCFMT_RIGHT));
@@ -266,12 +271,20 @@ void PreferencesDlg::UpdateList() {
 }
 
 void PreferencesDlg::UpdateListItem(int index, const GUID& guid, const file_info& info) {
+  bool is_newer = acfu::source::g_get(guid)->is_newer(info);
+
   CString last_version;
   if (auto value = info.meta_get("version", 0)) {
     last_version = pfc::stringcvt::string_os_from_utf8(value);
   }
-  else if (acfu::source::g_get(guid)->is_newer(info)) {
+  else if (is_newer) {
     ATLVERIFY(last_version.LoadString(IDS_GREATER_VERSION));
   }
   list_.SetItemText(index, kColAvailable, last_version);
+
+  LVITEM item = {0};
+  item.mask = LVIF_IMAGE;
+  item.iItem = index;
+  item.iImage = is_newer ? 0 : I_IMAGENONE;
+  list_.SetItem(&item);
 }
