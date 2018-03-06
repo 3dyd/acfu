@@ -98,6 +98,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="..\foobar2000\ATLHelpers\misc.cpp" />
     <ClCompile Include="foo_acfu.cpp" />
     <ClCompile Include="preferences_dlg.cpp" />
     <ClCompile Include="preferences_page.cpp" />
@@ -115,6 +116,7 @@
     <ClInclude Include="..\acfu-sdk\utils\check.h" />
     <ClInclude Include="..\acfu-sdk\utils\common.h" />
     <ClInclude Include="..\acfu-sdk\utils\github.h" />
+    <ClInclude Include="..\foobar2000\ATLHelpers\misc.h" />
     <ClInclude Include="list_column_auto_size.h" />
     <ClInclude Include="preferences_dlg.h" />
     <ClInclude Include="preferences_page.h" />

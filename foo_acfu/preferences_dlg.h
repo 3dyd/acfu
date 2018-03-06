@@ -18,6 +18,7 @@ class PreferencesDlg: public CDialogImpl<PreferencesDlg>,
     COMMAND_ID_HANDLER_EX(ID_CFU_SINGLE, OnCfuSingle)
     COMMAND_ID_HANDLER_EX(ID_CLEAR_CACHE, OnClearCache)
     COMMAND_HANDLER_EX(IDC_PERIOD_EDIT, EN_CHANGE, OnPeriodEdit)
+    NOTIFY_HANDLER_EX(IDC_SOURCE_LIST, LVN_COLUMNCLICK, OnListColunmClick)
     NOTIFY_HANDLER_EX(IDC_SOURCE_LIST, LVN_ITEMCHANGED, OnListItemChanged)
     NOTIFY_HANDLER_EX(IDC_CFU_ALL, BCN_DROPDOWN, OnSplitDropDown)
     NOTIFY_HANDLER_EX(IDC_WHY_LINK, NM_CLICK, OnWhy)
@@ -34,6 +35,7 @@ class PreferencesDlg: public CDialogImpl<PreferencesDlg>,
   void OnContextMenu(CWindow wnd, CPoint point);
   void OnDestroy();
   BOOL OnInitDialog(CWindow wndFocus, LPARAM lInitParam);
+  LRESULT OnListColunmClick(LPNMHDR pnmh);
   LRESULT OnListItemChanged(LPNMHDR pnmh);
   void OnPeriodEdit(UINT uNotifyCode, int nID, CWindow wndCtl);
   LRESULT OnSplitDropDown(LPNMHDR pnmh);
@@ -51,6 +53,7 @@ class PreferencesDlg: public CDialogImpl<PreferencesDlg>,
   pfc::list_t<GUID> GetCheckedSources() const;
   void FreeList();
   void InitList();
+  void SortList();
   void UpdateList();
   void UpdateListItem(int index, const GUID& guid, const file_info& info);
 

@@ -11,6 +11,19 @@ enum {
   kColAvailable,
 };
 
+static int s_sort_column = kColName;
+static bool s_sort_up = true;
+
+static int CALLBACK CompareFunc(LPARAM lParam1, LPARAM lParam2, LPARAM lParamSort) {
+  CListViewCtrl list((HWND)lParamSort);
+
+  CString str1, str2;
+  list.GetItemText(lParam1, s_sort_column, str1);
+  list.GetItemText(lParam2, s_sort_column, str2);
+
+  return str1.CompareNoCase(str2) * (s_sort_up ? 1 : -1);
+}
+
 PreferencesDlg::PreferencesDlg(preferences_page_callback::ptr callback): callback_(callback) {
   acfu::cfg_acfu_sources.sort();
 }
@@ -105,6 +118,8 @@ void PreferencesDlg::InitList() {
       list_.SetCheckState(index, TRUE);
     }
   });
+
+  SortList();
 }
 
 void PreferencesDlg::on_info_changed(const GUID& guid, const file_info& info) {
@@ -131,30 +146,13 @@ void PreferencesDlg::OnClearCache(UINT uNotifyCode, int nID, CWindow wndCtl) {
 }
 
 void PreferencesDlg::OnContextMenu(CWindow wnd, _WTYPES_NS::CPoint point) {
-  if (list_ != wnd) {
-    return SetMsgHandled(FALSE);
-  }
-  int index = list_.GetSelectedIndex();
-  if (-1 == index) {
-    return;
-  }
-
-  if (-1 == point.x && -1 == point.y) { // from keyboard
-    CRect client_rect, item_rect;
-    list_.GetClientRect(&client_rect);
-    list_.GetItemRect(index, &item_rect, LVIR_BOUNDS);
-    item_rect.IntersectRect(&item_rect, &client_rect);
-    if (!item_rect.IsRectEmpty()) {
-      point = CPoint(item_rect.left, item_rect.bottom);
-    }
-    else {
-      point = client_rect.CenterPoint();
-    }
-    list_.ClientToScreen(&point);
+  if (list_ != wnd || -1 == list_.GetSelectedIndex()) {
+    return SetMsgHandled(list_ == wnd);
   }
 
   CMenu menu;
   ATLVERIFY(menu.LoadMenu(IDR_SOURCE_POPUP));
+  ListView_FixContextMenuPoint(list_, point);
   menu.GetSubMenu(0).TrackPopupMenu(0, point.x, point.y, m_hWnd);
 }
 
@@ -196,6 +194,19 @@ BOOL PreferencesDlg::OnInitDialog(CWindow wndFocus, LPARAM lInitParam) {
   static_api_ptr_t<acfu::updates>()->register_callback(this);
 
   return TRUE;
+}
+
+LRESULT PreferencesDlg::OnListColunmClick(LPNMHDR pnmh) {
+  LPNMLISTVIEW info = (LPNMLISTVIEW)pnmh;
+  if (info->iSubItem == s_sort_column) {
+    s_sort_up = !s_sort_up;
+  }
+  else {
+    s_sort_column = info->iSubItem;
+  }
+  SortList();
+
+  return 0;
 }
 
 LRESULT PreferencesDlg::OnListItemChanged(LPNMHDR pnmh) {
@@ -259,6 +270,11 @@ void PreferencesDlg::reset() {
   clear_cache_ = false;
 
   callback_->on_state_changed();
+}
+
+void PreferencesDlg::SortList() {
+  HeaderControl_SetSortIndicator(list_.GetHeader(), s_sort_column, s_sort_up);
+  list_.SortItemsEx(CompareFunc, (LPARAM)list_.m_hWnd);
 }
 
 void PreferencesDlg::UpdateList() {

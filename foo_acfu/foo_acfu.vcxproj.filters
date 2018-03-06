@@ -51,6 +51,9 @@
     <ClCompile Include="status_cui.cpp">
       <Filter>UI</Filter>
     </ClCompile>
+    <ClCompile Include="..\foobar2000\ATLHelpers\misc.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
@@ -94,6 +97,9 @@
     </ClInclude>
     <ClInclude Include="split_button.h">
       <Filter>Preferences</Filter>
+    </ClInclude>
+    <ClInclude Include="..\foobar2000\ATLHelpers\misc.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
