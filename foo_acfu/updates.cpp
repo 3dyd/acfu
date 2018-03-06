@@ -168,7 +168,7 @@ void UpdatesImpl::SetInfoInMainThread(const GUID& guid, const file_info& info) {
     pfc::mutexScope lock(mutex_);
 
     auto& existing = cache_[pfc::print_guid(guid).get_ptr()];
-    if (file_info::g_is_info_equal(existing, info)) {
+    if (file_info::g_is_meta_equal(existing, info) && file_info::g_is_info_equal(existing, info)) {
       return;
     }
     existing = info;
