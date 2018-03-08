@@ -136,6 +136,7 @@ void StatusWnd::ResetToolBar() {
 
   DWORD style = CControlWinTraits::GetWndStyle(0) | WS_TABSTOP | TBSTYLE_TOOLTIPS | TBSTYLE_TRANSPARENT | CCS_NODIVIDER | CCS_NORESIZE;
   toolbar_.Create(m_hWnd, CRect(), 0, style);
+  toolbar_.SetWindowText(TEXT(APP_SHORT_NAME));
   toolbar_.SetButtonStructSize(sizeof(TBBUTTON));
   toolbar_.SetBitmapSize(size);
   toolbar_.AddBitmap(1, bitmap);

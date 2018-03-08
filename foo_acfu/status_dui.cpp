@@ -1,7 +1,6 @@
 #include "stdafx.h"
 #include "resource.h"
 #include "status_wnd.h"
-#include "version.h"
 
 class StatusDuiImpl: public StatusWnd, public ui_element_instance {
  public:
@@ -40,7 +39,7 @@ class StatusDuiImpl: public StatusWnd, public ui_element_instance {
   }
 
   void initialize_window(HWND parent) {
-    WIN32_OP(Create(parent, NULL, TEXT(APP_SHORT_NAME)) != NULL);
+    WIN32_OP(Create(parent) != NULL);
   }
 
  private:

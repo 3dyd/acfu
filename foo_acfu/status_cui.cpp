@@ -2,7 +2,6 @@
 #include "resource.h"
 #include "../columns_ui-sdk/ui_extension.h"
 #include "status_wnd.h"
-#include "version.h"
 
 using namespace uie;
 
@@ -124,7 +123,7 @@ class StatusCui: public StatusWnd, public window {
     else {
       CRect rect;
       p_position.convert_to_rect(rect);
-      Create(wnd_parent, rect, TEXT(APP_SHORT_NAME));
+      Create(wnd_parent, rect);
     }
     host_ = p_host;
 
