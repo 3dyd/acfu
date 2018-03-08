@@ -6,7 +6,7 @@
 
 using namespace uie;
 
-class CuiClient {
+class ResourceClient {
  public:
   void OnUiChanged() const {
     core_api::ensure_main_thread();
@@ -30,7 +30,7 @@ class CuiClient {
   pfc::list_t<StatusWnd*> windows_;
 };
 
-class FontsClient: public cui::fonts::client, public CuiClient {
+class FontsClient: public cui::fonts::client, public ResourceClient {
  public:
   CFontHandle GetFont() {
     if (!font_) {
@@ -70,7 +70,7 @@ class FontsClient: public cui::fonts::client, public CuiClient {
 
 static service_factory_single_t<FontsClient> g_fonts;
 
-class ColorsClient: public cui::colours::client, public CuiClient {
+class ColorsClient: public cui::colours::client, public ResourceClient {
  public:
   COLORREF GetColor(StatusWnd::Color color) {
     cui::colours::helper helper(get_client_guid());
@@ -109,6 +109,7 @@ class StatusCui: public StatusWnd, public window {
   BEGIN_MSG_MAP_EX(StatusCui)
     MSG_WM_CREATE(OnCreate)
     MSG_WM_DESTROY(OnDestroy)
+    MSG_WM_ERASEBKGND(OnEraseBkgnd)
     CHAIN_MSG_MAP(StatusWnd)
   END_MSG_MAP()
 
@@ -152,7 +153,7 @@ class StatusCui: public StatusWnd, public window {
   }
 
   virtual unsigned get_type() const {
-    return type_panel;
+    return type_panel | type_toolbar;
   }
 
   virtual HWND get_wnd() const {
@@ -176,6 +177,11 @@ class StatusCui: public StatusWnd, public window {
     g_fonts.get_static_instance().UnregisterWnd(this);
 
     SetMsgHandled(FALSE);
+  }
+
+  BOOL OnEraseBkgnd(CDCHandle dc) {
+    RelayEraseBkgnd(m_hWnd, GetParent(), dc);
+    return TRUE;
   }
 
  private:

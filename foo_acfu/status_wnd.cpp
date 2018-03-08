@@ -115,12 +115,15 @@ void StatusWnd::ResetToolBar() {
 
   CSize size = GetButtonSize(dc.m_hDC, font.m_hFont);
   CBitmap bitmap;
-  CreateButtonBitmap(bitmap, dc.m_hDC, font.m_hFont, size);
+  if (updates_count_ > 0) {
+    CreateButtonBitmap(bitmap, dc.m_hDC, font.m_hFont, size);
+  }
 
   if (toolbar_) {
     toolbar_.DestroyWindow();
   }
-  DWORD style = WS_TABSTOP | WS_CHILD | WS_VISIBLE | WS_CLIPCHILDREN | WS_CLIPSIBLINGS | TBSTYLE_TOOLTIPS | TBSTYLE_TRANSPARENT;
+
+  DWORD style = CControlWinTraits::GetWndStyle(0) | WS_TABSTOP | TBSTYLE_TOOLTIPS | TBSTYLE_TRANSPARENT | CCS_NODIVIDER;
   toolbar_.Create(m_hWnd, CRect(), 0, style);
   toolbar_.SetButtonStructSize(sizeof(TBBUTTON));
   toolbar_.SetBitmapSize(size);
