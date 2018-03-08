@@ -23,6 +23,7 @@ class StatusWnd: public CWindowImpl<StatusWnd, CWindow, StatusWndTraits>, public
  protected:
   virtual COLORREF GetUiColor(Color color) const = 0;
   virtual CFontHandle GetUiFont() const = 0;
+  void DrawHighlightedBackground(CDCHandle dc);
 
  private:
   int OnCreate(LPCREATESTRUCT lpCreateStruct);
@@ -34,7 +35,7 @@ class StatusWnd: public CWindowImpl<StatusWnd, CWindow, StatusWndTraits>, public
 
   virtual void on_updates_available(const pfc::list_base_const_t<GUID>& ids);
 
-  void CreateButtonBitmap(CBitmap& bitmap, CDCHandle dc, CFontHandle font, CSize size) const;
+  HBITMAP CreateButtonBitmap(CDCHandle dc, CFontHandle font, CSize size) const;
   CSize GetButtonSize(CDCHandle dc, CFontHandle font) const;
   void ResetToolBar();
   void UpdateToolBarSize();

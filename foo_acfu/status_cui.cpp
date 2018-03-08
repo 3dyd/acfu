@@ -181,6 +181,8 @@ class StatusCui: public StatusWnd, public window {
 
   BOOL OnEraseBkgnd(CDCHandle dc) {
     RelayEraseBkgnd(m_hWnd, GetParent(), dc);
+    DrawHighlightedBackground(dc);
+
     return TRUE;
   }
 

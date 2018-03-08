@@ -3,29 +3,38 @@
 #include "status_wnd.h"
 #include "preferences_page.h"
 
-void StatusWnd::CreateButtonBitmap(CBitmap& bitmap, CDCHandle dc, CFontHandle font, CSize size) const {
+HBITMAP StatusWnd::CreateButtonBitmap(CDCHandle dc, CFontHandle font, CSize size) const {
+  if (0 == updates_count_) {
+    return NULL;
+  }
+
   BITMAPINFO bmi = {{sizeof(bmi.bmiHeader), size.cx, size.cy, 1, 32, 0, DWORD(size.cx * size.cy)}};
-  bitmap.CreateDIBSection(NULL, &bmi, DIB_RGB_COLORS, NULL, NULL, 0);
+  HBITMAP bitmap = CreateDIBSection(NULL, &bmi, DIB_RGB_COLORS, NULL, NULL, 0);
   CDC mem_dc(CreateCompatibleDC(dc));
-  {
-    SelectObjectScope bitmap_scope(mem_dc, bitmap);
-    if (0 != updates_count_) {
-      CRect rect(CPoint(), size);
-      COLORREF fg_color = GetUiColor(kColorHighlight);
-      mem_dc.FillSolidRect(&rect, fg_color);
+  SelectObjectScope bitmap_scope(mem_dc, bitmap);
 
-      COLORREF bg_color = GetUiColor(kColorBackground);
-      SelectObjectScope font_scope(mem_dc, font);
-      mem_dc.SetBkColor(fg_color);
-      mem_dc.SetTextColor(bg_color);
+  CRect rect(CPoint(), size);
+  COLORREF fg_color = GetUiColor(kColorHighlight);
+  mem_dc.FillSolidRect(&rect, fg_color);
 
-      wchar_t count[20];
-      _itow_s(updates_count_, count, _countof(count), 10);
-      mem_dc.DrawText(count, -1, &rect, DT_CENTER | DT_VCENTER | DT_SINGLELINE);
-    }
-    else {
-      mem_dc.FillSolidRect(0, 0, size.cx, size.cy, GetUiColor(kColorBackground));
-    }
+  COLORREF bg_color = GetUiColor(kColorBackground);
+  SelectObjectScope font_scope(mem_dc, font);
+  mem_dc.SetBkColor(fg_color);
+  mem_dc.SetTextColor(bg_color);
+
+  wchar_t count[20];
+  _itow_s(updates_count_, count, _countof(count), 10);
+  mem_dc.DrawText(count, -1, &rect, DT_CENTER | DT_VCENTER | DT_SINGLELINE);
+
+  return bitmap;
+}
+
+void StatusWnd::DrawHighlightedBackground(CDCHandle dc) {
+  if (updates_count_ > 0) {
+    CRect rect;
+    toolbar_.GetWindowRect(&rect);
+    ScreenToClient(&rect);
+    dc.FillSolidRect(&rect, GetUiColor(kColorHighlight));
   }
 }
 
@@ -35,7 +44,6 @@ CSize StatusWnd::GetButtonSize(CDCHandle dc, CFontHandle font) const {
   dc.DrawText(L"99", -1, &rect, DT_CALCRECT);
 
   rect.right = LONG(1.5 * rect.right);
-  rect.bottom = LONG(1.3 * rect.bottom);
   const double FI = 1.62;
   if (FI * rect.bottom > rect.right) {
     rect.right = LONG(FI * rect.bottom);
@@ -75,6 +83,7 @@ BOOL StatusWnd::OnEraseBkgnd(CDCHandle dc) {
   CRect rect;
   GetClientRect(&rect);
   dc.FillSolidRect(&rect, GetUiColor(kColorBackground));
+  DrawHighlightedBackground(dc);
 
   return TRUE;
 }
@@ -110,24 +119,20 @@ void StatusWnd::OnUiChanged() {
 }
 
 void StatusWnd::ResetToolBar() {
-  CFont font(AtlCreateBoldFont(GetUiFont()));
-  CClientDC dc(m_hWnd);
-
-  CSize size = GetButtonSize(dc.m_hDC, font.m_hFont);
-  CBitmap bitmap;
-  if (updates_count_ > 0) {
-    CreateButtonBitmap(bitmap, dc.m_hDC, font.m_hFont, size);
-  }
-
   if (toolbar_) {
     toolbar_.DestroyWindow();
   }
 
-  DWORD style = CControlWinTraits::GetWndStyle(0) | WS_TABSTOP | TBSTYLE_TOOLTIPS | TBSTYLE_TRANSPARENT | CCS_NODIVIDER;
+  CFont font(AtlCreateBoldFont(GetUiFont()));
+  CClientDC dc(m_hWnd);
+  CSize size = GetButtonSize(dc.m_hDC, font.m_hFont);
+  HBITMAP bitmap = CreateButtonBitmap(dc.m_hDC, font.m_hFont, size);
+
+  DWORD style = CControlWinTraits::GetWndStyle(0) | WS_TABSTOP | TBSTYLE_TOOLTIPS | TBSTYLE_TRANSPARENT | CCS_NODIVIDER | CCS_NORESIZE;
   toolbar_.Create(m_hWnd, CRect(), 0, style);
   toolbar_.SetButtonStructSize(sizeof(TBBUTTON));
   toolbar_.SetBitmapSize(size);
-  toolbar_.AddBitmap(1, bitmap.Detach());
+  toolbar_.AddBitmap(1, bitmap);
   toolbar_.InsertButton(0, ID_PREFERENCES, 0, TBSTATE_ENABLED, 0, 0, NULL);
 
   UpdateToolBarSize();
