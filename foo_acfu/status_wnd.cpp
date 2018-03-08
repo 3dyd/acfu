@@ -88,6 +88,12 @@ BOOL StatusWnd::OnEraseBkgnd(CDCHandle dc) {
   return TRUE;
 }
 
+void StatusWnd::OnGetMinMaxInfo(LPMINMAXINFO lpMMI) {
+  CSize size;
+  toolbar_.GetMaxSize(&size);
+  lpMMI->ptMinTrackSize = CPoint(size.cx, size.cy);
+}
+
 void StatusWnd::OnPreferences(UINT uNotifyCode, int nID, CWindow wndCtl) {
   static_api_ptr_t<ui_control>()->show_preferences(guid_preferences_page);
 }

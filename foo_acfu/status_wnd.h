@@ -8,6 +8,7 @@ class StatusWnd: public CWindowImpl<StatusWnd, CWindow, StatusWndTraits>, public
     MSG_WM_CREATE(OnCreate)
     MSG_WM_DESTROY(OnDestroy)
     MSG_WM_ERASEBKGND(OnEraseBkgnd)
+    MSG_WM_GETMINMAXINFO(OnGetMinMaxInfo)
     MSG_WM_SIZE(OnSize)
     COMMAND_ID_HANDLER_EX(ID_PREFERENCES, OnPreferences)
     NOTIFY_CODE_HANDLER_EX(TTN_GETDISPINFO, OnToolTipText)
@@ -29,6 +30,7 @@ class StatusWnd: public CWindowImpl<StatusWnd, CWindow, StatusWndTraits>, public
   int OnCreate(LPCREATESTRUCT lpCreateStruct);
   void OnDestroy();
   BOOL OnEraseBkgnd(CDCHandle dc);
+  void OnGetMinMaxInfo(LPMINMAXINFO lpMMI);
   void OnPreferences(UINT uNotifyCode, int nID, CWindow wndCtl);
   void OnSize(UINT nType, CSize size);
   LRESULT OnToolTipText(LPNMHDR pnmh);
