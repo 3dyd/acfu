@@ -6,6 +6,7 @@
 #error this file is not editable by Microsoft Visual C++
 #endif //APSTUDIO_INVOKED
 
+#include "urls.h"
 #include "version.h"
 
 /////////////////////////////////////////////////////////////////////////////
@@ -30,7 +31,7 @@ BEGIN
     BEGIN
         BLOCK "040904e4"
         BEGIN
-            VALUE "Comments", "https://3dyd.com"
+            VALUE "Comments", APP_URL_MAIN
             VALUE "CompanyName", "3DYD Soft"
             VALUE "FileDescription", APP_LONG_NAME
             VALUE "FileVersion", APP_VERSION

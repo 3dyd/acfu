@@ -101,6 +101,9 @@
     <ClInclude Include="..\foobar2000\ATLHelpers\misc.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="urls.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="foo_acfu.rc">

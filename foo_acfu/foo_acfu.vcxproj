@@ -117,6 +117,7 @@
     <ClInclude Include="..\acfu-sdk\utils\common.h" />
     <ClInclude Include="..\acfu-sdk\utils\github.h" />
     <ClInclude Include="..\foobar2000\ATLHelpers\misc.h" />
+    <ClInclude Include="urls.h" />
     <ClInclude Include="list_column_auto_size.h" />
     <ClInclude Include="preferences_dlg.h" />
     <ClInclude Include="preferences_page.h" />

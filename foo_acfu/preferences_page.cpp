@@ -2,6 +2,7 @@
 #include "resource.h"
 #include "preferences_page.h"
 #include "preferences_dlg.h"
+#include "urls.h"
 
 // {0E966267-7DFB-433B-A07C-3F8CDD31A258}
 static const GUID guid_components =
@@ -11,6 +12,11 @@ class PreferencesPage: public preferences_page_impl<PreferencesDlg> {
  public:
   virtual GUID get_guid() {
     return guid_preferences_page;
+  }
+
+  virtual bool get_help_url(pfc::string_base & p_out) {
+    p_out = APP_URL_HELP;
+    return true;
   }
 
   virtual const char* get_name() {

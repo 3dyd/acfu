@@ -3,6 +3,7 @@
 #include "preferences_dlg.h"
 #include "scheduler.h"
 #include "updates.h"
+#include "urls.h"
 
 enum {
   kColName,
@@ -258,7 +259,7 @@ LRESULT PreferencesDlg::OnSplitDropDown(LPNMHDR pnmh) {
 }
 
 LRESULT PreferencesDlg::OnWhy(LPNMHDR pnmh) {
-  ShellExecute(NULL, L"open", L"https://www.google.com", NULL, NULL, SW_SHOWNORMAL);
+  ShellExecute(NULL, L"open", TEXT(APP_URL_WHY), NULL, NULL, SW_SHOWNORMAL);
   return 0;
 }
 
