@@ -1,4 +1,5 @@
 #include "stdafx.h"
+#include "urls.h"
 
 DECLARE_COMPONENT_VERSION(
   APP_SHORT_NAME,
@@ -18,27 +19,28 @@ struct AcfuGithubConf: acfu::github_conf {
   }
 };
 
-#if 0
 // #ifdef _DEBUG
-
-#include "preferences_page.h"
-
-class PpDebug: public initquit {
-  virtual void on_init() {
-    static_api_ptr_t<ui_control>()->show_preferences(guid_preferences_page);
-  }
-};
-static service_factory_single_t<PpDebug> g_pp_debug;
+// #include "preferences_page.h"
+// class PpDebug: public initquit {
+//   virtual void on_init() {
+//     static_api_ptr_t<ui_control>()->show_preferences(guid_preferences_page);
+//   }
+// };
+// static service_factory_single_t<PpDebug> g_pp_debug;
+// #endif
 
 class AcfuRequest: public acfu::github_releases<AcfuGithubConf> {
-  virtual pfc::string8 form_releases_url() {
-    return "http://127.0.0.1:8888/releases.json";
+// #ifdef _DEBUG
+//   virtual pfc::string8 form_releases_url() {
+//     return "http://127.0.0.1:8888/releases.json";
+//   }
+// #endif
+
+  virtual void process_release(const rapidjson::Value& release, file_info& info) {
+    __super::process_release(release, info);
+    info.meta_set("download_page", APP_URL_DOWNLOAD);
   }
 };
-
-#else
-typedef acfu::github_releases<AcfuGithubConf> AcfuRequest;
-#endif
 
 class AcfuSource: public acfu::source {
   virtual GUID get_guid() {
