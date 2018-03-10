@@ -38,7 +38,7 @@ class AcfuRequest: public acfu::github_releases<AcfuGithubConf> {
 
   virtual void process_release(const rapidjson::Value& release, file_info& info) {
     __super::process_release(release, info);
-    info.meta_set("download_page", APP_URL_DOWNLOAD);
+    info.meta_remove_field("download_page");
   }
 };
 
@@ -54,6 +54,7 @@ class AcfuSource: public acfu::source {
     info.meta_set("version", APP_VERSION);
     info.meta_set("name", APP_SHORT_NAME);
     info.meta_set("module", APP_BINARY_NAME);
+    info.meta_set("download_page", APP_URL_DOWNLOAD);
   }
 
   virtual bool is_newer(const file_info& info) {
