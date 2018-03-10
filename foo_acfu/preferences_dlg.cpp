@@ -187,9 +187,7 @@ void PreferencesDlg::OnContextMenu(CWindow wnd, _WTYPES_NS::CPoint point) {
   source->get_info(info);
   file_info_impl updates_info;
   static_api_ptr_t<acfu::updates>()->get_info(*guid_ptr, updates_info);
-  if (source->is_newer(updates_info)) {
-    info.copy_meta(updates_info);
-  }
+  info.copy_meta(updates_info);
 
   CMenu popup(BuildContextMenu(source, info));
   ListView_FixContextMenuPoint(list_, point);
@@ -202,7 +200,7 @@ void PreferencesDlg::OnContextMenu(CWindow wnd, _WTYPES_NS::CPoint point) {
       ShellExecute(NULL, L"open", pfc::stringcvt::string_os_from_utf8(url), NULL, NULL, SW_SHOWNORMAL);
     }
     else {
-      PostMessage(cmd);
+      PostMessage(WM_COMMAND, cmd);
     }
   }
 }
