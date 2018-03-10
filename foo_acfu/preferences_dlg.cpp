@@ -183,11 +183,11 @@ void PreferencesDlg::OnContextMenu(CWindow wnd, _WTYPES_NS::CPoint point) {
   }
 
   file_info_impl info;
+  static_api_ptr_t<acfu::updates>()->get_info(*guid_ptr, info);
   auto source = acfu::source::g_get(*guid_ptr);
-  source->get_info(info);
-  file_info_impl updates_info;
-  static_api_ptr_t<acfu::updates>()->get_info(*guid_ptr, updates_info);
-  info.copy_meta(updates_info);
+  file_info_impl source_info;
+  source->get_info(source_info);
+  info.merge_fallback(source_info);
 
   CMenu popup(BuildContextMenu(source, info));
   ListView_FixContextMenuPoint(list_, point);
