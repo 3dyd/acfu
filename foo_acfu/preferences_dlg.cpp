@@ -64,6 +64,9 @@ HMENU PreferencesDlg::BuildContextMenu(const acfu::source::ptr& source, const fi
   if (info.meta_exists("download_page")) {
     popup.AppendMenu(MF_STRING, ID_GOTO_DOWNLOAD_PAGE, Tr(ID_GOTO_DOWNLOAD_PAGE));
   }
+  if (info.meta_exists("download_url")) {
+    popup.AppendMenu(MF_STRING, ID_DOWNLOAD, Tr(ID_DOWNLOAD));
+  }
   source->context_menu_build(popup, ID_CONTEXT_MENU_BASE);
 
   return popup.Detach();
@@ -194,8 +197,8 @@ void PreferencesDlg::OnContextMenu(CWindow wnd, _WTYPES_NS::CPoint point) {
     if (cmd >= ID_CONTEXT_MENU_BASE) {
       source->context_menu_command(cmd, ID_CONTEXT_MENU_BASE);
     }
-    else if (ID_GOTO_DOWNLOAD_PAGE == cmd) {
-      const char* url = info.meta_get("download_page", 0);
+    else if (ID_GOTO_DOWNLOAD_PAGE == cmd || ID_DOWNLOAD == cmd) {
+      const char* url = info.meta_get(ID_DOWNLOAD == cmd ? "download_url" : "download_page", 0);
       ShellExecute(NULL, L"open", pfc::stringcvt::string_os_from_utf8(url), NULL, NULL, SW_SHOWNORMAL);
     }
     else {
