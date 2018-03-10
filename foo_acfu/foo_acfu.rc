@@ -113,6 +113,7 @@ END
 STRINGTABLE
 BEGIN
     ID_CFU_SINGLE           "Check for Updates..."
+    ID_GOTO_DOWNLOAD_PAGE   "Go to Download Page"
 END
 
 #endif    // English (United States) resources

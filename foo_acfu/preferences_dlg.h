@@ -50,7 +50,7 @@ class PreferencesDlg: public CDialogImpl<PreferencesDlg>,
   // acfu::cache::callback
   virtual void on_info_changed(const GUID& guid, const file_info& info);
 
-  HMENU BuildContextMenu(const acfu::source::ptr& source) const;
+  HMENU BuildContextMenu(const acfu::source::ptr& source, const file_info_impl& info) const;
   pfc::list_t<GUID> GetCheckedSources() const;
   void FreeList();
   void InitList();

@@ -58,9 +58,12 @@ void PreferencesDlg::apply() {
   callback_->on_state_changed();
 }
 
-HMENU PreferencesDlg::BuildContextMenu(const acfu::source::ptr& source) const {
+HMENU PreferencesDlg::BuildContextMenu(const acfu::source::ptr& source, const file_info_impl& info) const {
   CMenu popup(CreatePopupMenu());
   popup.AppendMenu(MF_STRING, ID_CFU_SINGLE, Tr(ID_CFU_SINGLE));
+  if (info.meta_exists("download_page")) {
+    popup.AppendMenu(MF_STRING, ID_GOTO_DOWNLOAD_PAGE, Tr(ID_GOTO_DOWNLOAD_PAGE));
+  }
   source->context_menu_build(popup, ID_CONTEXT_MENU_BASE);
 
   return popup.Detach();
@@ -176,13 +179,24 @@ void PreferencesDlg::OnContextMenu(CWindow wnd, _WTYPES_NS::CPoint point) {
     return;
   }
 
+  file_info_impl info;
   auto source = acfu::source::g_get(*guid_ptr);
+  source->get_info(info);
+  file_info_impl updates_info;
+  static_api_ptr_t<acfu::updates>()->get_info(*guid_ptr, updates_info);
+  if (source->is_newer(updates_info)) {
+    info.copy_meta(updates_info);
+  }
 
-  CMenu popup(BuildContextMenu(source));
+  CMenu popup(BuildContextMenu(source, info));
   ListView_FixContextMenuPoint(list_, point);
   if (unsigned cmd = popup.TrackPopupMenu(TPM_RIGHTBUTTON | TPM_NONOTIFY | TPM_RETURNCMD, point.x, point.y, m_hWnd)) {
     if (cmd >= ID_CONTEXT_MENU_BASE) {
       source->context_menu_command(cmd, ID_CONTEXT_MENU_BASE);
+    }
+    else if (ID_GOTO_DOWNLOAD_PAGE == cmd) {
+      const char* url = info.meta_get("download_page", 0);
+      ShellExecute(NULL, L"open", pfc::stringcvt::string_os_from_utf8(url), NULL, NULL, SW_SHOWNORMAL);
     }
     else {
       PostMessage(cmd);
