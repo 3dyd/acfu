@@ -25,6 +25,18 @@ static int CALLBACK CompareFunc(LPARAM lParam1, LPARAM lParam2, LPARAM lParamSor
   return str1.CompareNoCase(str2) * (s_sort_up ? 1 : -1);
 }
 
+struct Tr {
+  Tr(unsigned string_id) {
+    ATLVERIFY(text.LoadString(string_id));
+  }
+
+  operator const wchar_t*() const {
+    return static_cast<const wchar_t*>(text);
+  }
+
+  CString text;
+};
+
 PreferencesDlg::PreferencesDlg(preferences_page_callback::ptr callback): callback_(callback) {
   acfu::cfg_acfu_sources.sort();
 }
@@ -44,6 +56,14 @@ void PreferencesDlg::apply() {
   }
 
   callback_->on_state_changed();
+}
+
+HMENU PreferencesDlg::BuildContextMenu(const acfu::source::ptr& source) const {
+  CMenu popup(CreatePopupMenu());
+  popup.AppendMenu(MF_STRING, ID_CFU_SINGLE, Tr(ID_CFU_SINGLE));
+  source->context_menu_build(popup, ID_CONTEXT_MENU_BASE);
+
+  return popup.Detach();
 }
 
 void PreferencesDlg::FreeList() {
@@ -147,14 +167,27 @@ void PreferencesDlg::OnClearCache(UINT uNotifyCode, int nID, CWindow wndCtl) {
 }
 
 void PreferencesDlg::OnContextMenu(CWindow wnd, _WTYPES_NS::CPoint point) {
-  if (list_ != wnd || -1 == list_.GetSelectedIndex()) {
-    return SetMsgHandled(list_ == wnd);
+  if (list_ != wnd) {
+    return SetMsgHandled(FALSE);
   }
 
-  CMenu menu;
-  ATLVERIFY(menu.LoadMenu(IDR_SOURCE_POPUP));
+  auto guid_ptr = reinterpret_cast<GUID*>(list_.GetItemData(list_.GetSelectedIndex()));
+  if (!guid_ptr) {
+    return;
+  }
+
+  auto source = acfu::source::g_get(*guid_ptr);
+
+  CMenu popup(BuildContextMenu(source));
   ListView_FixContextMenuPoint(list_, point);
-  menu.GetSubMenu(0).TrackPopupMenu(0, point.x, point.y, m_hWnd);
+  if (unsigned cmd = popup.TrackPopupMenu(TPM_RIGHTBUTTON | TPM_NONOTIFY | TPM_RETURNCMD, point.x, point.y, m_hWnd)) {
+    if (cmd >= ID_CONTEXT_MENU_BASE) {
+      source->context_menu_command(cmd, ID_CONTEXT_MENU_BASE);
+    }
+    else {
+      PostMessage(cmd);
+    }
+  }
 }
 
 void PreferencesDlg::OnDestroy() {

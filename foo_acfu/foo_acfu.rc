@@ -88,14 +88,6 @@ END
 // Menu
 //
 
-IDR_SOURCE_POPUP MENU
-BEGIN
-    POPUP "###"
-    BEGIN
-        MENUITEM "Check for Updates...",        ID_CFU_SINGLE
-    END
-END
-
 IDR_MAIN_POPUP MENU
 BEGIN
     POPUP "###"
@@ -116,6 +108,11 @@ BEGIN
     IDS_GREATER_VERSION     "greater"
     IDS_NO_UPDATES          "No updates are available"
     IDS_UPDATES_AVAILABLE   "Updates are available (%d)"
+END
+
+STRINGTABLE
+BEGIN
+    ID_CFU_SINGLE           "Check for Updates..."
 END
 
 #endif    // English (United States) resources

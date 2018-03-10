@@ -3,8 +3,7 @@
 // Used by foo_acfu.rc
 //
 #define IDD_PROPERTIES                  101
-#define IDR_SOURCE_POPUP                102
-#define IDR_MAIN_POPUP                  103
+#define IDR_MAIN_POPUP                  102
 #define IDS_NEED_APPLY                  201
 #define IDS_GREATER_VERSION             202
 #define IDS_NO_UPDATES                  203
@@ -18,12 +17,13 @@
 #define ID_CFU_SINGLE                   40001
 #define ID_CLEAR_CACHE                  40002
 #define ID_PREFERENCES                  40003
+#define ID_CONTEXT_MENU_BASE            40100
 
 // Next default values for new objects
 // 
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
-#define _APS_NEXT_RESOURCE_VALUE        104
+#define _APS_NEXT_RESOURCE_VALUE        103
 #define _APS_NEXT_COMMAND_VALUE         40004
 #define _APS_NEXT_CONTROL_VALUE         1007
 #define _APS_NEXT_SYMED_VALUE           101
