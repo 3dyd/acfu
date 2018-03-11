@@ -104,6 +104,9 @@
     <ClInclude Include="urls.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="..\acfu-sdk\utils\plain.h">
+      <Filter>SDK</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="foo_acfu.rc">

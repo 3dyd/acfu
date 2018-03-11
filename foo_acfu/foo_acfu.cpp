@@ -9,7 +9,8 @@ DECLARE_COMPONENT_VERSION(
 
 VALIDATE_COMPONENT_FILENAME(APP_BINARY_NAME ".dll");
 
-struct AcfuGithubConf: acfu::github_conf {
+class AcfuRequest: public acfu::github_latest_release<AcfuRequest>, public acfu::github_conf {
+ public:
   static const char* get_owner() {
     return "3dyd";
   }
@@ -17,24 +18,6 @@ struct AcfuGithubConf: acfu::github_conf {
   static const char* get_repo() {
     return "acfu";
   }
-};
-
-// #ifdef _DEBUG
-// #include "preferences_page.h"
-// class PpDebug: public initquit {
-//   virtual void on_init() {
-//     static_api_ptr_t<ui_control>()->show_preferences(guid_preferences_page);
-//   }
-// };
-// static service_factory_single_t<PpDebug> g_pp_debug;
-// #endif
-
-class AcfuRequest: public acfu::github_releases<AcfuGithubConf> {
-// #ifdef _DEBUG
-//   virtual pfc::string8 form_releases_url() {
-//     return "http://127.0.0.1:8888/releases.json";
-//   }
-// #endif
 
   virtual void process_release(const rapidjson::Value& release, file_info& info) {
     __super::process_release(release, info);
@@ -58,11 +41,8 @@ class AcfuSource: public acfu::source {
   }
 
   virtual bool is_newer(const file_info& info) {
-    if (info.meta_exists("version")) {
-      const char* version = info.meta_get("version", 0);
-      return acfu::compare_versions(version, APP_VERSION, "v") > 0;
-    }
-    return false;
+    const char* version = info.meta_get("version", 0);
+    return acfu::compare_versions(version, APP_VERSION, "v") > 0;
   }
 
   virtual acfu::request::ptr create_request() {
