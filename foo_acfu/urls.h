@@ -4,5 +4,5 @@
 #define APP_URL_SITE      "https://acfu.3dyd.com"
 
 #define APP_URL_DOWNLOAD  APP_URL_SITE "/download/"
-#define APP_URL_HELP      APP_URL_SITE
-#define APP_URL_WHY       APP_URL_SITE "/#Why"
+#define APP_URL_PREFS     APP_URL_SITE "/help/#Preferences"
+#define APP_URL_WHY       APP_URL_SITE "/help/#Why"

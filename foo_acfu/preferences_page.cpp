@@ -15,7 +15,7 @@ class PreferencesPage: public preferences_page_impl<PreferencesDlg> {
   }
 
   virtual bool get_help_url(pfc::string_base & p_out) {
-    p_out = APP_URL_HELP;
+    p_out = APP_URL_PREFS;
     return true;
   }
 
