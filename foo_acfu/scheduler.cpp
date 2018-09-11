@@ -45,9 +45,14 @@ class Check: public threaded_process_callback {
     for (t_size i = 0; i < sources_.get_size(); i ++) {
       try {
         auto source = source::g_get(sources_[i]);
+
         file_info_impl info;
         source->get_info(info);
-        status.set_item(info.info_exists("name") ? info.info_get("name") : "");
+        const char* name = "";
+        if (info.meta_exists("name")) {
+          name = info.meta_get("name", 0);
+        }
+        status.set_item(name);
 
         auto request = source->create_request();
         if (request.is_valid()) {
