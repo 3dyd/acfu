@@ -39,16 +39,17 @@ class threaded_process_status_dummy: public threaded_process_status {
 
 class Check: public threaded_process_callback {
  public:
-  Check(const pfc::list_t<GUID>& sources): sources_(sources) {}
+  Check(const pfc::list_t<GUID>& sources, bool silent)
+    : sources_(sources), silent_(silent) {}
 
   virtual void run(threaded_process_status& status, abort_callback& abort) {
     for (t_size i = 0; i < sources_.get_size(); i ++) {
+      pfc::string8 name = pfc::print_guid(sources_[i]);
       try {
         auto source = source::g_get(sources_[i]);
 
         file_info_impl info;
         source->get_info(info);
-        const char* name = "";
         if (info.meta_exists("name")) {
           name = info.meta_get("name", 0);
         }
@@ -62,22 +63,38 @@ class Check: public threaded_process_callback {
         }
       }
       catch (std::exception& e) {
-        console::formatter()
-          << APP_SHORT_NAME << ": failed for source "
-          << pfc::print_guid(sources_[i]) << ": " << e.what();
+        auto error = pfc::string8(name) <<  ": " << e.what();
+        console::formatter() << APP_SHORT_NAME << ": failed for source " << error;
+
+        if (!silent_) {
+          if (!errors_.is_empty()) {
+            errors_+= "\n\n";
+          }
+          errors_ += error;
+        }
       }
 
       status.set_progress_float((1. + i) / sources_.get_size());
     }
   }
 
+  virtual void on_done(ctx_t p_wnd, bool p_was_aborted) {
+    if (!silent_ && !errors_.is_empty()) {
+      pfc::string8 message = "The following errors occurred during the checking for updates:\n\n";
+      message += errors_;
+      popup_message_v2::g_show(GetParent(p_wnd), message.get_ptr());
+    }
+  }
+
  private:
   pfc::list_t<GUID> sources_;
+  bool silent_;
+  pfc::string8 errors_;
 };
 
 void Scheduler::Check(HWND parent, const pfc::list_t<GUID>& sources) {
   threaded_process::g_run_modal(
-    new service_impl_t<acfu::Check>(sources),
+    new service_impl_t<acfu::Check>(sources, false),
     threaded_process::flag_show_abort | threaded_process::flag_show_progress | threaded_process::flag_show_item,
     parent,
     "Checking for Updates..."
@@ -105,7 +122,7 @@ class BackgroundCheck: private CSimpleThread {
 
   virtual unsigned ThreadProc(abort_callback& abort) {
     console::formatter() << APP_SHORT_NAME << ": checking for updates...";
-    service_impl_t<Check> check(sources_);
+    service_impl_t<Check> check(sources_, true);
     try {
       check.run(threaded_process_status_dummy(), abort);
     }
