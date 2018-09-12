@@ -108,6 +108,10 @@ BEGIN
     IDS_GREATER_VERSION     "greater"
     IDS_NO_UPDATES          "No updates are available"
     IDS_UPDATES_AVAILABLE   "Updates are available (%d)"
+    IDS_COL_NAME            "Name"
+    IDS_COL_AVAILABLE       "Available"
+    IDS_COL_INSTALLED       "Installed"
+    IDS_COL_MODULE          "Module"
 END
 
 STRINGTABLE

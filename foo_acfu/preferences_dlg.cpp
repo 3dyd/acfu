@@ -7,9 +7,9 @@
 
 enum {
   kColName,
-  kColModule,
-  kColInstalled,
   kColAvailable,
+  kColInstalled,
+  kColModule,
 };
 
 static int s_sort_column = kColName;
@@ -36,6 +36,44 @@ struct Tr {
 
   CString text;
 };
+
+DWORD SourcesList::OnItemPrePaint(int /*idCtrl*/, LPNMCUSTOMDRAW lpNMCustomDraw) {
+  return CDRF_DODEFAULT | CDRF_NOTIFYSUBITEMDRAW;
+}
+
+DWORD SourcesList::OnPrePaint(int /*idCtrl*/, LPNMCUSTOMDRAW lpNMCustomDraw) {
+  CDCHandle dc(lpNMCustomDraw->hdc);
+  default_font_ = dc.GetCurrentFont();
+
+  if (bold_font_) {
+    bold_font_.DeleteObject();
+  }
+  CreateScaledFontEx(bold_font_, default_font_, 1, FW_BOLD);
+
+  return CDRF_DODEFAULT | CDRF_NOTIFYITEMDRAW;
+}
+
+DWORD SourcesList::OnSubItemPrePaint(int /*idCtrl*/, LPNMCUSTOMDRAW lpNMCustomDraw) {
+  LPNMLVCUSTOMDRAW info = (LPNMLVCUSTOMDRAW)lpNMCustomDraw;
+  bool grayed = false;
+  bool bold = false;
+
+  if (kColAvailable == info->iSubItem || kColInstalled == info->iSubItem) {
+    LVITEM item = {0};
+    item.mask = LVIF_IMAGE;
+    item.iItem = info->nmcd.dwItemSpec;
+    if (GetItem(&item)) {
+      grayed = I_IMAGENONE == item.iImage;
+      bold = !grayed && kColAvailable == info->iSubItem;
+    }
+  }
+
+  // Do not care about themed colors for now
+  info->clrText = GetSysColor(grayed ? COLOR_GRAYTEXT : COLOR_BTNTEXT);
+  SelectObject(lpNMCustomDraw->hdc, bold ? bold_font_.m_hFont : default_font_.m_hFont);
+
+  return CDRF_NEWFONT;
+}
 
 PreferencesDlg::PreferencesDlg(preferences_page_callback::ptr callback): callback_(callback) {
   acfu::cfg_acfu_sources.sort();
@@ -230,10 +268,10 @@ BOOL PreferencesDlg::OnInitDialog(CWindow wndFocus, LPARAM lInitParam) {
   il.AddIcon(LoadIcon(NULL, IDI_EXCLAMATION));
   list_.SetImageList(il.Detach(), LVSIL_SMALL);
 
-  ATLVERIFY(kColName == list_.InsertColumn(kColName, L"Name"));
-  ATLVERIFY(kColModule == list_.InsertColumn(kColModule, L"Module"));
-  ATLVERIFY(kColInstalled == list_.InsertColumn(kColInstalled, L"Installed", LVCFMT_RIGHT));
-  ATLVERIFY(kColAvailable == list_.InsertColumn(kColAvailable, L"Available", LVCFMT_RIGHT));
+  ATLVERIFY(kColName == list_.InsertColumn(kColName, Tr(IDS_COL_NAME)));
+  ATLVERIFY(kColAvailable == list_.InsertColumn(kColAvailable, Tr(IDS_COL_AVAILABLE)));
+  ATLVERIFY(kColInstalled == list_.InsertColumn(kColInstalled, Tr(IDS_COL_INSTALLED)));
+  ATLVERIFY(kColModule == list_.InsertColumn(kColModule, Tr(IDS_COL_MODULE)));
 
   InitList();
   UpdateList();

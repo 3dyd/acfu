@@ -4,6 +4,24 @@
 #include "list_column_auto_size.h"
 #include "split_button.h"
 
+class SourcesList: public CListColumnAutoSizeImpl<SourcesList>,
+                   public CCustomDraw<SourcesList> {
+ public:
+  BEGIN_MSG_MAP_EX(SourcesList)
+    CHAIN_MSG_MAP(CListColumnAutoSizeImpl<SourcesList>)
+    CHAIN_MSG_MAP_ALT(CCustomDraw<SourcesList>, 1)
+    DEFAULT_REFLECTION_HANDLER()
+  END_MSG_MAP()
+
+  DWORD OnPrePaint(int /*idCtrl*/, LPNMCUSTOMDRAW /*lpNMCustomDraw*/);
+  DWORD OnItemPrePaint(int /*idCtrl*/, LPNMCUSTOMDRAW /*lpNMCustomDraw*/);
+  DWORD OnSubItemPrePaint(int /*idCtrl*/, LPNMCUSTOMDRAW lpNMCustomDraw);
+
+ private:
+  CFont bold_font_;
+  CFontHandle default_font_;
+};
+
 class PreferencesDlg: public CDialogImpl<PreferencesDlg>,
                       public preferences_page_instance,
                       public acfu::updates::callback {
@@ -23,6 +41,7 @@ class PreferencesDlg: public CDialogImpl<PreferencesDlg>,
     NOTIFY_HANDLER_EX(IDC_CFU_ALL, BCN_DROPDOWN, OnSplitDropDown)
     NOTIFY_HANDLER_EX(IDC_WHY_LINK, NM_CLICK, OnWhy)
     NOTIFY_HANDLER_EX(IDC_WHY_LINK, NM_RETURN, OnWhy)
+    REFLECT_NOTIFICATIONS_HWND_FILTERED(list_)
   END_MSG_MAP()
 
   PreferencesDlg(preferences_page_callback::ptr callback);
@@ -70,7 +89,7 @@ class PreferencesDlg: public CDialogImpl<PreferencesDlg>,
  private:
   const preferences_page_callback::ptr callback_;
   CFont title_font_;
-  CListColumnAutoSize list_;
+  SourcesList list_;
   CSplitButton split_;
   bool clear_cache_ = false;
 };

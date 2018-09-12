@@ -8,6 +8,10 @@
 #define IDS_GREATER_VERSION             202
 #define IDS_NO_UPDATES                  203
 #define IDS_UPDATES_AVAILABLE           204
+#define IDS_COL_NAME                    205
+#define IDS_COL_AVAILABLE               206
+#define IDS_COL_INSTALLED               207
+#define IDS_COL_MODULE                  208
 #define IDC_SOURCE_LIST                 1001
 #define IDC_WHY_LINK                    1002
 #define IDC_AVAILABLE_SOURCES           1003
