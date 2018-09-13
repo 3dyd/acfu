@@ -7,9 +7,10 @@ static const char* CLEANUP_FLAG = "." APP_BINARY_NAME "-clean-up";
 
 static service_factory_single_t<UpdatesImpl> g_cache;
 
+// NOTE: should be in sync with embedded::EmbeddedInit (executed _after_ it)
 class CacheLoad: public init_stage_callback {
   virtual void on_init_stage(t_uint32 stage) {
-    if (init_stages::after_library_init == stage) {
+    if (init_stages::after_ui_init == stage) {
       g_cache.get_static_instance().Load();
     }
   }

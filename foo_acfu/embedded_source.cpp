@@ -82,11 +82,14 @@ bool Component::IsModified() {
   return initially_enabled_ != cfg_enabled_;
 }
 
-class EmbeddedInit: public initquit {
-  virtual void on_init() {
-    for_each_service<acfu::source, Embedded>([](auto& ptr) {
-      ptr->Init();
-    });
+// NOTE: should be in sync with acfu::CacheLoad (executed _before_ it)
+class EmbeddedInit: public init_stage_callback {
+  virtual void on_init_stage(t_uint32 stage) {
+    if (init_stages::before_ui_init == stage) {
+      for_each_service<acfu::source, Embedded>([](auto& ptr) {
+        ptr->Init();
+      });
+    }
   }
 };
 
