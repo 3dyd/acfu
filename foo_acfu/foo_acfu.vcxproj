@@ -99,6 +99,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="..\foobar2000\ATLHelpers\misc.cpp" />
+    <ClCompile Include="embedded_columns_ui.cpp" />
     <ClCompile Include="embedded_jscript.cpp" />
     <ClCompile Include="embedded_source.cpp" />
     <ClCompile Include="embedded_sources_dlg.cpp" />

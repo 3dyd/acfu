@@ -66,6 +66,9 @@
     <ClCompile Include="embedded_jscript.cpp">
       <Filter>Embedded</Filter>
     </ClCompile>
+    <ClCompile Include="embedded_columns_ui.cpp">
+      <Filter>Embedded</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
