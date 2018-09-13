@@ -22,6 +22,9 @@
     <Filter Include="Preferences">
       <UniqueIdentifier>{192adf1f-a08a-442f-8297-5668d47894be}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Embedded">
+      <UniqueIdentifier>{4add9f9f-38f7-4b38-8033-4435451cfeb5}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="foo_acfu.cpp">
@@ -53,6 +56,12 @@
     </ClCompile>
     <ClCompile Include="..\foobar2000\ATLHelpers\misc.cpp">
       <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="embedded_source.cpp">
+      <Filter>Embedded</Filter>
+    </ClCompile>
+    <ClCompile Include="embedded_sources_dlg.cpp">
+      <Filter>Embedded</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -106,6 +115,15 @@
     </ClInclude>
     <ClInclude Include="..\acfu-sdk\utils\plain.h">
       <Filter>SDK</Filter>
+    </ClInclude>
+    <ClInclude Include="embedded_source.h">
+      <Filter>Embedded</Filter>
+    </ClInclude>
+    <ClInclude Include="embedded_sources_dlg.h">
+      <Filter>Embedded</Filter>
+    </ClInclude>
+    <ClInclude Include="utils.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

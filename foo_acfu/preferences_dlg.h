@@ -35,6 +35,7 @@ class PreferencesDlg: public CDialogImpl<PreferencesDlg>,
     COMMAND_ID_HANDLER_EX(IDC_CFU_ALL, OnCfuAll)
     COMMAND_ID_HANDLER_EX(ID_CFU_SINGLE, OnCfuSingle)
     COMMAND_ID_HANDLER_EX(ID_CLEAR_CACHE, OnClearCache)
+    COMMAND_ID_HANDLER_EX(ID_MANAGE_EMBEDDED, OnManagedEmbedded)
     COMMAND_HANDLER_EX(IDC_PERIOD_EDIT, EN_CHANGE, OnPeriodEdit)
     NOTIFY_HANDLER_EX(IDC_SOURCE_LIST, LVN_COLUMNCLICK, OnListColunmClick)
     NOTIFY_HANDLER_EX(IDC_SOURCE_LIST, LVN_ITEMCHANGED, OnListItemChanged)
@@ -47,13 +48,14 @@ class PreferencesDlg: public CDialogImpl<PreferencesDlg>,
   PreferencesDlg(preferences_page_callback::ptr callback);
   ~PreferencesDlg();
 
- protected:
+ private:
   void OnCfuAll(UINT uNotifyCode, int nID, CWindow wndCtl);
   void OnCfuSingle(UINT uNotifyCode, int nID, CWindow wndCtl);
   void OnClearCache(UINT uNotifyCode, int nID, CWindow wndCtl);
   void OnContextMenu(CWindow wnd, CPoint point);
   void OnDestroy();
   BOOL OnInitDialog(CWindow wndFocus, LPARAM lInitParam);
+  void OnManagedEmbedded(UINT uNotifyCode, int nID, CWindow wndCtl);
   LRESULT OnListColunmClick(LPNMHDR pnmh);
   LRESULT OnListItemChanged(LPNMHDR pnmh);
   void OnPeriodEdit(UINT uNotifyCode, int nID, CWindow wndCtl);

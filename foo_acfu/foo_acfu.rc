@@ -65,6 +65,16 @@ BEGIN
     PUSHBUTTON      "Check for Updates",IDC_CFU_ALL,232,272,100,16
 END
 
+IDD_EMBEDDED_SOURCES DIALOGEX 0, 0, 183, 204
+STYLE DS_SETFONT | DS_MODALFRAME | DS_FIXEDSYS | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "Embedded Sources"
+FONT 8, "MS Shell Dlg", 400, 0, 0x1
+BEGIN
+    CONTROL         "",IDC_EMBEDDED_SOURCES,"SysListView32",LVS_REPORT | LVS_ALIGNLEFT | LVS_NOCOLUMNHEADER | WS_BORDER | WS_TABSTOP,7,7,169,169
+    DEFPUSHBUTTON   "OK",IDOK,72,183,50,14
+    PUSHBUTTON      "Cancel",IDCANCEL,127,183,50,14
+END
+
 
 /////////////////////////////////////////////////////////////////////////////
 //
@@ -78,6 +88,14 @@ BEGIN
     BEGIN
         RIGHTMARGIN, 332
         BOTTOMMARGIN, 287
+    END
+
+    IDD_EMBEDDED_SOURCES, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 176
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 197
     END
 END
 #endif    // APSTUDIO_INVOKED
@@ -93,6 +111,7 @@ BEGIN
     POPUP "###"
     BEGIN
         MENUITEM "Clear Cache",                 ID_CLEAR_CACHE
+        MENUITEM "Manage Embedded Sources",     ID_MANAGE_EMBEDDED
     END
 END
 
@@ -111,7 +130,12 @@ BEGIN
     IDS_COL_NAME            "Name"
     IDS_COL_AVAILABLE       "Available"
     IDS_COL_INSTALLED       "Installed"
+END
+
+STRINGTABLE
+BEGIN
     IDS_COL_MODULE          "Module"
+    IDS_SOURCE              "Source"
 END
 
 STRINGTABLE

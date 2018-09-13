@@ -99,6 +99,8 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="..\foobar2000\ATLHelpers\misc.cpp" />
+    <ClCompile Include="embedded_source.cpp" />
+    <ClCompile Include="embedded_sources_dlg.cpp" />
     <ClCompile Include="foo_acfu.cpp" />
     <ClCompile Include="preferences_dlg.cpp" />
     <ClCompile Include="preferences_page.cpp" />
@@ -118,6 +120,8 @@
     <ClInclude Include="..\acfu-sdk\utils\github.h" />
     <ClInclude Include="..\acfu-sdk\utils\plain.h" />
     <ClInclude Include="..\foobar2000\ATLHelpers\misc.h" />
+    <ClInclude Include="embedded_source.h" />
+    <ClInclude Include="embedded_sources_dlg.h" />
     <ClInclude Include="urls.h" />
     <ClInclude Include="list_column_auto_size.h" />
     <ClInclude Include="preferences_dlg.h" />
@@ -129,6 +133,7 @@
     <ClInclude Include="status_wnd.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="updates.h" />
+    <ClInclude Include="utils.h" />
     <ClInclude Include="version.h" />
   </ItemGroup>
   <ItemGroup>

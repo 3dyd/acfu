@@ -1,9 +1,11 @@
 #include "stdafx.h"
 #include "resource.h"
 #include "preferences_dlg.h"
+#include "embedded_sources_dlg.h"
 #include "scheduler.h"
 #include "updates.h"
 #include "urls.h"
+#include "utils.h"
 
 enum {
   kColName,
@@ -24,18 +26,6 @@ static int CALLBACK CompareFunc(LPARAM lParam1, LPARAM lParam2, LPARAM lParamSor
 
   return str1.CompareNoCase(str2) * (s_sort_up ? 1 : -1);
 }
-
-struct Tr {
-  Tr(unsigned string_id) {
-    ATLVERIFY(text.LoadString(string_id));
-  }
-
-  operator const wchar_t*() const {
-    return static_cast<const wchar_t*>(text);
-  }
-
-  CString text;
-};
 
 DWORD SourcesList::OnItemPrePaint(int /*idCtrl*/, LPNMCUSTOMDRAW lpNMCustomDraw) {
   return CDRF_DODEFAULT | CDRF_NOTIFYSUBITEMDRAW;
@@ -146,6 +136,10 @@ t_uint32 PreferencesDlg::get_state() {
   resettable = resettable || clear_cache_;
   changed = changed || clear_cache_;
   need_restart = need_restart  || clear_cache_;
+
+  bool is_any_modified = embedded::Embedded::IsAnyModified();
+  changed = changed || is_any_modified;
+  need_restart = need_restart || is_any_modified;
 
   t_uint32 state = resettable ? preferences_state::resettable : 0;
   state |= changed ? preferences_state::changed : 0;
@@ -281,6 +275,13 @@ BOOL PreferencesDlg::OnInitDialog(CWindow wndFocus, LPARAM lInitParam) {
   static_api_ptr_t<acfu::updates>()->register_callback(this);
 
   return TRUE;
+}
+
+void PreferencesDlg::OnManagedEmbedded(UINT uNotifyCode, int nID, CWindow wndCtl) {
+  EmbeddedSourceDlg dlg;
+  if (IDOK == dlg.DoModal(m_hWnd)) {
+    callback_->on_state_changed();
+  }
 }
 
 LRESULT PreferencesDlg::OnListColunmClick(LPNMHDR pnmh) {
