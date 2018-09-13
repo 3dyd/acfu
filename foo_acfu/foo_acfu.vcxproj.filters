@@ -63,6 +63,9 @@
     <ClCompile Include="embedded_sources_dlg.cpp">
       <Filter>Embedded</Filter>
     </ClCompile>
+    <ClCompile Include="embedded_jscript.cpp">
+      <Filter>Embedded</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
