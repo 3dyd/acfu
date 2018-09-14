@@ -79,7 +79,7 @@ void PreferencesDlg::apply() {
   t_uint32 period = CUpDownCtrl(GetDlgItem(IDC_PERIOD_SPIN)).GetPos(NULL);
   static_api_ptr_t<acfu::Scheduler>()->SetPeriod(period);
 
-  if (clear_cache_) {
+  if (clear_cache_ || embedded::Embedded::IsAnyModified()) {
     acfu::UpdatesImpl::ScheduleCleanup();
   }
 
@@ -137,9 +137,9 @@ t_uint32 PreferencesDlg::get_state() {
   changed = changed || clear_cache_;
   need_restart = need_restart  || clear_cache_;
 
-  bool is_any_modified = embedded::Embedded::IsAnyModified();
-  changed = changed || is_any_modified;
-  need_restart = need_restart || is_any_modified;
+  bool embedded_modified = embedded::Embedded::IsAnyModified();
+  changed = changed || embedded_modified;
+  need_restart = need_restart || embedded_modified;
 
   t_uint32 state = resettable ? preferences_state::resettable : 0;
   state |= changed ? preferences_state::changed : 0;

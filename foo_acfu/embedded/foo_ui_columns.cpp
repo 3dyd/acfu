@@ -60,16 +60,18 @@ class ColumnsUi: public Component, public acfu::github_conf {
   }
 
   virtual bool IsNewer(const char* available, const char* installed) override {
-    try {
-      auto available_parts = GetParts(available);
-      auto installed_parts = GetParts(installed);
-      for (size_t i = 0; i < available_parts.get_size(); i ++) {
-        if (int diff = available_parts[i] - installed_parts[i]) {
-          return diff > 0;
+    if (available && installed) {
+      try {
+        auto available_parts = GetParts(available);
+        auto installed_parts = GetParts(installed);
+        for (size_t i = 0; i < available_parts.get_size(); i ++) {
+          if (int diff = available_parts[i] - installed_parts[i]) {
+            return diff > 0;
+          }
         }
       }
-    }
-    catch (acfu::version_error&) {
+      catch (acfu::version_error&) {
+      }
     }
     return false;
   }
