@@ -57,16 +57,16 @@
     <ClCompile Include="..\foobar2000\ATLHelpers\misc.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="embedded_source.cpp">
+    <ClCompile Include="embedded\embedded.cpp">
       <Filter>Embedded</Filter>
     </ClCompile>
-    <ClCompile Include="embedded_sources_dlg.cpp">
+    <ClCompile Include="embedded\foo_jscript_panel.cpp">
       <Filter>Embedded</Filter>
     </ClCompile>
-    <ClCompile Include="embedded_jscript.cpp">
+    <ClCompile Include="embedded\foo_ui_columns.cpp">
       <Filter>Embedded</Filter>
     </ClCompile>
-    <ClCompile Include="embedded_columns_ui.cpp">
+    <ClCompile Include="embedded\sources_dlg.cpp">
       <Filter>Embedded</Filter>
     </ClCompile>
   </ItemGroup>
@@ -122,14 +122,14 @@
     <ClInclude Include="..\acfu-sdk\utils\plain.h">
       <Filter>SDK</Filter>
     </ClInclude>
-    <ClInclude Include="embedded_source.h">
-      <Filter>Embedded</Filter>
-    </ClInclude>
-    <ClInclude Include="embedded_sources_dlg.h">
-      <Filter>Embedded</Filter>
-    </ClInclude>
     <ClInclude Include="utils.h">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="embedded\embedded.h">
+      <Filter>Embedded</Filter>
+    </ClInclude>
+    <ClInclude Include="embedded\sources_dlg.h">
+      <Filter>Embedded</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

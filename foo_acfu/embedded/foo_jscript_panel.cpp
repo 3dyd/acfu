@@ -1,5 +1,5 @@
 #include "stdafx.h"
-#include "embedded_source.h"
+#include "embedded.h"
 #include "../acfu-sdk/utils/github.h"
 
 namespace embedded {

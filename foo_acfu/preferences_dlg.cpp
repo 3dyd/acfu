@@ -1,7 +1,7 @@
 #include "stdafx.h"
 #include "resource.h"
 #include "preferences_dlg.h"
-#include "embedded_sources_dlg.h"
+#include "embedded/sources_dlg.h"
 #include "scheduler.h"
 #include "updates.h"
 #include "urls.h"
@@ -278,7 +278,7 @@ BOOL PreferencesDlg::OnInitDialog(CWindow wndFocus, LPARAM lInitParam) {
 }
 
 void PreferencesDlg::OnManagedEmbedded(UINT uNotifyCode, int nID, CWindow wndCtl) {
-  EmbeddedSourceDlg dlg;
+  embedded::SourceDlg dlg;
   if (IDOK == dlg.DoModal(m_hWnd)) {
     callback_->on_state_changed();
   }

@@ -62,6 +62,7 @@
       <WarningLevel>Level3</WarningLevel>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
       <AdditionalOptions>/Zc:threadSafeInit- /std:c++latest %(AdditionalOptions)</AdditionalOptions>
+      <AdditionalIncludeDirectories>./</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <AdditionalDependencies>..\foobar2000\shared\shared.lib;%(AdditionalDependencies)</AdditionalDependencies>
@@ -83,6 +84,7 @@
       <TreatWarningAsError>true</TreatWarningAsError>
       <EnableEnhancedInstructionSet>NoExtensions</EnableEnhancedInstructionSet>
       <AdditionalOptions>/Zc:threadSafeInit- /std:c++latest %(AdditionalOptions)</AdditionalOptions>
+      <AdditionalIncludeDirectories>./</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <AdditionalDependencies>..\foobar2000\shared\shared.lib;%(AdditionalDependencies)</AdditionalDependencies>
@@ -99,10 +101,10 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="..\foobar2000\ATLHelpers\misc.cpp" />
-    <ClCompile Include="embedded_columns_ui.cpp" />
-    <ClCompile Include="embedded_jscript.cpp" />
-    <ClCompile Include="embedded_source.cpp" />
-    <ClCompile Include="embedded_sources_dlg.cpp" />
+    <ClCompile Include="embedded\embedded.cpp" />
+    <ClCompile Include="embedded\foo_jscript_panel.cpp" />
+    <ClCompile Include="embedded\foo_ui_columns.cpp" />
+    <ClCompile Include="embedded\sources_dlg.cpp" />
     <ClCompile Include="foo_acfu.cpp" />
     <ClCompile Include="preferences_dlg.cpp" />
     <ClCompile Include="preferences_page.cpp" />
@@ -122,8 +124,8 @@
     <ClInclude Include="..\acfu-sdk\utils\github.h" />
     <ClInclude Include="..\acfu-sdk\utils\plain.h" />
     <ClInclude Include="..\foobar2000\ATLHelpers\misc.h" />
-    <ClInclude Include="embedded_source.h" />
-    <ClInclude Include="embedded_sources_dlg.h" />
+    <ClInclude Include="embedded\embedded.h" />
+    <ClInclude Include="embedded\sources_dlg.h" />
     <ClInclude Include="urls.h" />
     <ClInclude Include="list_column_auto_size.h" />
     <ClInclude Include="preferences_dlg.h" />

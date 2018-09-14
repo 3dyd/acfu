@@ -1,14 +1,16 @@
 #pragma once
 
 #include <atlctrlx.h>
-#include "embedded_source.h"
+#include "embedded.h"
 #include "list_column_auto_size.h"
 
-class EmbeddedSourceDlg: public CDialogImpl<EmbeddedSourceDlg> {
+namespace embedded {
+
+class SourceDlg: public CDialogImpl<SourceDlg> {
  public:
   enum { IDD = IDD_EMBEDDED_SOURCES };
 
-  BEGIN_MSG_MAP_EX(EmbeddedSourceDlg)
+  BEGIN_MSG_MAP_EX(SourceDlg)
     MSG_WM_INITDIALOG(OnInitDialog)
     COMMAND_ID_HANDLER_EX(IDCANCEL, OnCancel)
     COMMAND_ID_HANDLER_EX(IDOK, OnOK)
@@ -22,5 +24,7 @@ class EmbeddedSourceDlg: public CDialogImpl<EmbeddedSourceDlg> {
  private:
   CCheckListViewCtrl checkbox_list_;
   CListColumnAutoSize list_;
-  pfc::map_t<unsigned, embedded::Embedded::ptr> sources_;
+  pfc::map_t<unsigned, Embedded::ptr> sources_;
 };
+
+} // namespace embedded
