@@ -28,6 +28,10 @@ void Component::get_info(file_info& info) {
   info.copy_meta(info_);
 }
 
+const file_info& Component::GetInfo() const {
+  return info_;
+}
+
 const char* Component::GetName() {
   return file_name_.get_ptr();
 }
@@ -65,13 +69,6 @@ void Component::Init() {
   if (!name.is_empty()) {
     info_.meta_set("name", name.get_ptr());
   }
-}
-
-bool Component::is_newer(const file_info& info) {
-  const char* available = info.meta_get("version", 0);
-  const char* installed = info_.meta_get("version", 0);
-
-  return IsNewer(available, installed);
 }
 
 bool Component::IsEnabled() {

@@ -12,7 +12,6 @@ class Jscript: public Component, public acfu::github_conf {
  public:
   Jscript(): Component(guid_jscript, "foo_jscript_panel") {}
 
- public:
   static const char* get_owner() {
     return "marc2k3";
   }
@@ -31,7 +30,10 @@ class Jscript: public Component, public acfu::github_conf {
     return request;
   }
 
-  virtual bool IsNewer(const char* available, const char* installed) override {
+  virtual bool is_newer(const file_info& info) override {
+    const char* available = info.meta_get("version", 0);
+    const char* installed = GetInfo().meta_get("version", 0);
+
     return acfu::compare_versions(available, installed, "v") > 0;
   }
 };

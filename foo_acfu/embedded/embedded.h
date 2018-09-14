@@ -28,7 +28,6 @@ class Component: public Embedded {
 
   virtual GUID get_guid() override;
   virtual void get_info(file_info& info) override;
-  virtual bool is_newer(const file_info& info) override;
 
   virtual void Enable(bool enable) override;
   virtual const char* GetName() override;
@@ -36,7 +35,7 @@ class Component: public Embedded {
   virtual bool IsEnabled() override;
   virtual bool IsModified() override;
 
-  virtual bool IsNewer(const char* available, const char* installed) = 0;
+  const file_info& GetInfo() const;
 
  private:
   bool initially_enabled_ = true;
