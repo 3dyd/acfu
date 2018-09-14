@@ -14,6 +14,7 @@
 #define IDS_COL_INSTALLED               207
 #define IDS_COL_MODULE                  208
 #define IDS_SOURCE                      209
+#define IDS_FOLLOW_PRERELEASES          210
 #define IDC_SOURCE_LIST                 1001
 #define IDC_WHY_LINK                    1002
 #define IDC_AVAILABLE_SOURCES           1003

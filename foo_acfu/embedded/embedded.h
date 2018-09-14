@@ -36,7 +36,7 @@ class Component: public Embedded {
   virtual bool IsEnabled() override;
   virtual bool IsModified() override;
 
-  virtual bool IsNewer(const char* available, const char* isntalled) = 0;
+  virtual bool IsNewer(const char* available, const char* installed) = 0;
 
  private:
   bool initially_enabled_ = true;

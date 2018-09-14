@@ -31,8 +31,8 @@ class Jscript: public Component, public acfu::github_conf {
     return request;
   }
 
-  virtual bool IsNewer(const char* available, const char* isntalled) override {
-    return acfu::compare_versions(available, isntalled, "v") > 0;
+  virtual bool IsNewer(const char* available, const char* installed) override {
+    return acfu::compare_versions(available, installed, "v") > 0;
   }
 };
 

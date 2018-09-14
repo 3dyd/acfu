@@ -136,6 +136,7 @@ STRINGTABLE
 BEGIN
     IDS_COL_MODULE          "Module"
     IDS_SOURCE              "Source"
+    IDS_FOLLOW_PRERELEASES  "Follow pre-releases"
 END
 
 STRINGTABLE
