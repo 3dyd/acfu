@@ -37,10 +37,39 @@ class threaded_process_status_dummy: public threaded_process_status {
   virtual bool process_pause() { return false; }
 };
 
+class BackgroundAbort: public abort_callback {
+ public:
+  enum { ONE_MINUTE = 60 * 1000 * 10000 };
+
+  BackgroundAbort(abort_callback& abort): outer_abort_(abort.get_handle()) {
+    timer_.Attach(CreateWaitableTimer(NULL, TRUE, NULL));
+    LARGE_INTEGER due_time;
+    due_time.QuadPart = - ONE_MINUTE;
+    SetWaitableTimer(timer_, &due_time, 0, NULL, NULL, FALSE);
+  }
+
+  virtual bool is_aborting() const override {
+    HANDLE events[2] = {outer_abort_, timer_};
+    return WAIT_TIMEOUT != WaitForMultipleObjects(2, events, FALSE, 0);
+  }
+
+  virtual abort_callback_event get_abort_event() const override {
+    return timer_;
+  }
+
+  bool is_timed_out() const {
+    return WAIT_TIMEOUT != WaitForSingleObject(timer_, 0);
+  }
+
+ private:
+  CHandle timer_;
+  HANDLE outer_abort_;
+};
+
 class Check: public threaded_process_callback {
  public:
-  Check(const pfc::list_t<GUID>& sources, bool silent)
-    : sources_(sources), silent_(silent) {}
+  Check(const pfc::list_t<GUID>& sources, bool background)
+    : sources_(sources), background_(background) {}
 
   virtual void run(threaded_process_status& status, abort_callback& abort) {
     for (t_size i = 0; i < sources_.get_size(); i ++) {
@@ -57,8 +86,7 @@ class Check: public threaded_process_callback {
 
         auto request = source->create_request();
         if (request.is_valid()) {
-          file_info_impl info;
-          request->run(info, abort);
+          file_info_impl info = perform(*request, abort);
           static_api_ptr_t<updates>()->set_info(source->get_guid(), info);
         }
       }
@@ -66,7 +94,7 @@ class Check: public threaded_process_callback {
         auto error = pfc::string8(name) <<  ": " << e.what();
         console::formatter() << APP_SHORT_NAME << ": failed for source " << error;
 
-        if (!silent_) {
+        if (!background_) {
           if (!errors_.is_empty()) {
             errors_+= "\n\n";
           }
@@ -79,7 +107,7 @@ class Check: public threaded_process_callback {
   }
 
   virtual void on_done(ctx_t p_wnd, bool p_was_aborted) {
-    if (!silent_ && !errors_.is_empty()) {
+    if (!background_ && !errors_.is_empty()) {
       pfc::string8 message = "The following errors occurred during the checking for updates:\n\n";
       message += errors_;
       popup_message_v2::g_show(GetParent(p_wnd), message.get_ptr());
@@ -87,8 +115,29 @@ class Check: public threaded_process_callback {
   }
 
  private:
+  file_info_impl perform(request& request, abort_callback& abort) {
+    file_info_impl info;
+    if (background_) {
+      BackgroundAbort bg_abort(abort);
+      try {
+        request.run(info, bg_abort);
+      }
+      catch (exception_aborted&) {
+        if (bg_abort.is_timed_out()) {
+          throw std::logic_error("request timed out");
+        }
+        throw;
+      }
+    }
+    else {
+      request.run(info, abort);
+    }
+    return info;
+  }
+
+ private:
   pfc::list_t<GUID> sources_;
-  bool silent_;
+  bool background_;
   pfc::string8 errors_;
 };
 
