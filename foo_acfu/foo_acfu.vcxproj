@@ -103,6 +103,7 @@
     <ClCompile Include="..\foobar2000\ATLHelpers\misc.cpp" />
     <ClCompile Include="embedded\embedded.cpp" />
     <ClCompile Include="embedded\foo_jscript_panel.cpp" />
+    <ClCompile Include="embedded\foo_scrobble.cpp" />
     <ClCompile Include="embedded\foo_ui_columns.cpp" />
     <ClCompile Include="embedded\sources_dlg.cpp" />
     <ClCompile Include="foo_acfu.cpp" />

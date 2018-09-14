@@ -69,6 +69,9 @@
     <ClCompile Include="embedded\sources_dlg.cpp">
       <Filter>Embedded</Filter>
     </ClCompile>
+    <ClCompile Include="embedded\foo_scrobble.cpp">
+      <Filter>Embedded</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
