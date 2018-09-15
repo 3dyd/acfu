@@ -12,10 +12,10 @@ struct Tr {
   CString text;
 };
 
-template <class TService, class TExtension, class TFunc>
-void for_each_service(TFunc&& func) {
-  acfu::for_each_service<TService>([&](auto& ptr) {
-    service_ptr_t<TExtension> ext;
+template <class t_service, class t_extension, class t_func>
+void for_each_service(t_func&& func) {
+  acfu::for_each_service<t_service>([&](auto& ptr) {
+    service_ptr_t<t_extension> ext;
     if (ptr->service_query_t(ext)) {
       func(ext);
     }

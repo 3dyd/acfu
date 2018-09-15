@@ -1,5 +1,6 @@
 #include "stdafx.h"
 #include "embedded.h"
+#include "utils.h"
 
 namespace embedded {
 
@@ -7,10 +8,17 @@ namespace embedded {
 static const GUID guid_fb2k_core =
 {0x39733416, 0x2ad5, 0x4ca6, { 0x82, 0x5e, 0xfa, 0x69, 0x67, 0x97, 0x7f, 0xfe }};
 
+// {DB46A577-9E0B-4ACF-9B59-DD546BDD1C0B}
+static const GUID guid_check_for_beta =
+{0xdb46a577, 0x9e0b, 0x4acf, { 0x9b, 0x59, 0xdd, 0x54, 0x6b, 0xdd, 0x1c, 0x0b }};
+
 class Fb2kCore: public Component {
   class Request: public acfu::request {
    public:
     Request(const char* version): version_(version ? version : "") {}
+
+   private:
+    bool check_for_beta() const;
     virtual void run(file_info& info, abort_callback& abort) override;
 
    private:
@@ -42,12 +50,30 @@ class Fb2kCore: public Component {
 
 static service_factory_single_t<Fb2kCore> g_fb2k_core;
 
+bool Fb2kCore::Request::check_for_beta() const {
+  bool check = false;
+  for_each_service<advconfig_entry, advconfig_entry_checkbox>([&check](auto ptr) {
+    if (!ptr->is_radio()) {
+      pfc::string8 name;
+      ptr->get_name(name);
+      if (0 == pfc::strcmp_partial(name.get_ptr(), "Check for beta versions of foobar2000") ||
+          guid_check_for_beta == ptr->get_guid()) {
+        check = ptr->get_state();
+      }
+    }
+  });
+  return check;
+}
+
 void Fb2kCore::Request::run(file_info& info, abort_callback& abort) {
   pfc::string8 encoded;
   urlEncode(encoded, version_.c_str());
 
   pfc::string8 url = "https://www.foobar2000.org/update-core?version=";
   url += encoded;
+  if (check_for_beta()) {
+    url += "&beta";
+  }
 
   auto request = static_api_ptr_t<http_client>()->create_request("GET");
   file::ptr response = request->run(url, abort);
