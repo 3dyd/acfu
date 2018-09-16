@@ -102,6 +102,7 @@
   <ItemGroup>
     <ClCompile Include="..\foobar2000\ATLHelpers\misc.cpp" />
     <ClCompile Include="embedded\embedded.cpp" />
+    <ClCompile Include="embedded\fb2k_components.cpp" />
     <ClCompile Include="embedded\fb2k_core.cpp" />
     <ClCompile Include="embedded\foo_jscript_panel.cpp" />
     <ClCompile Include="embedded\foo_scrobble.cpp" />

@@ -137,6 +137,8 @@ BEGIN
     IDS_COL_MODULE          "Module"
     IDS_SOURCE              "Source"
     IDS_FOLLOW_PRERELEASES  "Follow pre-releases"
+    IDS_TOTAL               "total: %d"
+    IDS_HAVE_UPDATES        "updates: %d"
 END
 
 STRINGTABLE
