@@ -42,7 +42,7 @@ class AcfuSource: public acfu::source {
 
   virtual bool is_newer(const file_info& info) {
     const char* version = info.meta_get("version", 0);
-    return acfu::compare_versions(version, APP_VERSION, "v") > 0;
+    return acfu::is_newer(version, APP_VERSION);
   }
 
   virtual acfu::request::ptr create_request() {

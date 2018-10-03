@@ -149,7 +149,7 @@ t_uint32 PreferencesDlg::get_state() {
 }
 
 void PreferencesDlg::InitList() {
-  acfu::for_each_service<acfu::source>([&](auto ptr) {
+  for_each_service<acfu::source>([&](auto ptr) {
     if (pfc::guid_null == ptr->get_guid()) {
       return;
     }

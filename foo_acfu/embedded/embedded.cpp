@@ -43,7 +43,7 @@ void Component::Init() {
   }
 
   componentversion::ptr cv;
-  acfu::for_each_service<componentversion>([&](auto& ptr) {
+  for_each_service<componentversion>([&](auto& ptr) {
     pfc::string8 file_name;
     ptr->get_file_name(file_name);
     if (file_name == file_name_) {

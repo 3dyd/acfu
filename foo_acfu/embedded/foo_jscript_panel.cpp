@@ -34,7 +34,7 @@ class Jscript: public Component, public acfu::github_conf {
     const char* available = info.meta_get("version", 0);
     const char* installed = GetInfo().meta_get("version", 0);
 
-    return acfu::compare_versions(available, installed, "v") > 0;
+    return acfu::is_newer(available, installed);
   }
 };
 

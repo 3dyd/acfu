@@ -2,6 +2,7 @@
 #include "resource.h"
 #include "preferences_page.h"
 #include "preferences_dlg.h"
+#include "utils.h"
 #include "urls.h"
 
 // {0E966267-7DFB-433B-A07C-3F8CDD31A258}
@@ -25,7 +26,7 @@ class PreferencesPage: public preferences_page_impl<PreferencesDlg> {
 
   virtual GUID get_parent_guid() {
     auto guid = guid_tools;
-    acfu::for_each_service<preferences_page>([&guid](auto ptr) {
+    for_each_service<preferences_page>([&guid](auto ptr) {
       if (guid_preferences_page == ptr->get_guid()) {
         return;
       }
