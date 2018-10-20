@@ -41,6 +41,14 @@ class Fb2kCore: public Component {
   }
 
   virtual bool is_newer(const file_info& info) override {
+    auto checked_version = info.info_get("checked_version");
+    if (!checked_version) {
+      return false;
+    }
+    auto current_version = GetInfo().meta_get("version", 0);
+    if (0 != strcmp(current_version, checked_version)) {
+      return false;
+    }
     if (auto response = info.info_get("is_newer")) {
       return 0 == strcmp(response, "1");
     }
@@ -80,6 +88,8 @@ void Fb2kCore::Request::run(file_info& info, abort_callback& abort) {
   pfc::array_t<char> data;
   response->read_till_eof(data, abort);
   data.append_fromptr("", 1);
+
+  info.info_set("checked_version", version_.get_ptr());
 
   if (0 == strcmp(data.get_ptr(), "1")) {
     info.info_set("is_newer", "1");
