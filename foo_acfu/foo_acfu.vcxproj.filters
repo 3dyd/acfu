@@ -75,6 +75,9 @@
     <ClCompile Include="embedded\fb2k_core.cpp">
       <Filter>Embedded</Filter>
     </ClCompile>
+    <ClCompile Include="authorization.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
