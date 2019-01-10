@@ -6,8 +6,8 @@
 #define APP_BINARY_NAME       "foo_acfu"
 
 #define APP_VERSION_MAJOR 0
-#define APP_VERSION_MINOR 2
-#define APP_VERSION_BUILD 1
+#define APP_VERSION_MINOR 3
+#define APP_VERSION_BUILD 0
 
 #define __STR(text)  #text
 #define _STR(text)  __STR(text)
