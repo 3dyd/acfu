@@ -13,7 +13,7 @@ class Jscript: public Component, public acfu::github_conf {
   Jscript(): Component(guid_jscript, "foo_jscript_panel") {}
 
   static const char* get_owner() {
-    return "marc2k3";
+    return "marc2k3 & kbuffington";
   }
 
   static const char* get_repo() {
@@ -22,7 +22,7 @@ class Jscript: public Component, public acfu::github_conf {
 
   virtual void get_info(file_info& info) override {
     __super::get_info(info);
-    info.meta_set("download_page", "https://github.com/marc2k3/foo_jscript_panel/releases");
+    info.meta_set("download_page", "https://github.com/kbuffington/foo_jscript_panel/releases");
   }
 
   virtual acfu::request::ptr create_request() override {
