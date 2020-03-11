@@ -13,7 +13,7 @@ class Jscript: public Component, public acfu::github_conf {
   Jscript(): Component(guid_jscript, "foo_jscript_panel") {}
 
   static const char* get_owner() {
-    return "marc2k3 & kbuffington";
+    return "kbuffington";
   }
 
   static const char* get_repo() {
